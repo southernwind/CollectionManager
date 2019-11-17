@@ -120,6 +120,8 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Models\Item.cs" />
+    <Compile Include="Models\ItemSet.cs" />
+    <Compile Include="Models\Ordinal.cs" />
     <Compile Include="Views\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
