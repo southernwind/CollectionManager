@@ -5,12 +5,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Storage;
+
+using CollectionManager.Composition.Base;
+
 using Reactive.Bindings;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Media;
 
 namespace CollectionManager.ViewModels {
-	internal class MainPageViewModel {
+	internal class MainPageViewModel : ViewModelBase {
 		public ReactiveCollection<BitmapImage> Files {
 			get;
 			set;
