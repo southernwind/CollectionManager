@@ -8,24 +8,15 @@
 	xmlns:vm="using:CollectionManager.ViewModels"
 	Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
 	mc:Ignorable="d">
-	<Grid>
-		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="200" />
-			<ColumnDefinition Width="*" />
-		</Grid.ColumnDefinitions>
-		<Button
-			Grid.Column="0"
-			Click="Button_Click"
-			Content="Load" />
-		<GridView Grid.Column="1" ItemsSource="{x:Bind ViewModel.Files}">
-			<ItemsControl.ItemTemplate>
-				<DataTemplate>
-					<Image
-						MaxWidth="200"
-						MaxHeight="200"
-						Source="{Binding}" />
-				</DataTemplate>
-			</ItemsControl.ItemTemplate>
-		</GridView>
-	</Grid>
+	<NavigationView ItemInvoked="NavigationView_ItemInvoked">
+		<NavigationView.MenuItems>
+			<NavigationViewItem
+				Content="Home"
+				Icon="Home"
+				Tag="home" />
+		</NavigationView.MenuItems>
+		<ScrollViewer>
+			<Frame x:Name="ContentFrame" />
+		</ScrollViewer>
+	</NavigationView>
 </Page>
