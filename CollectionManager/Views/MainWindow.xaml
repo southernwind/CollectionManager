@@ -6,9 +6,11 @@
 	xmlns:local="clr-namespace:CollectionManager.Views"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:prism="http://prismlibrary.com/"
+	xmlns:vm="clr-namespace:CollectionManager.ViewModels"
 	Title="MainWindow"
 	Width="800"
 	Height="450"
+	d:DataContext="{d:DesignInstance vm:MainWindowViewModel}"
 	prism:ViewModelLocator.AutoWireViewModel="True"
 	mc:Ignorable="d">
 	<DockPanel>
@@ -17,6 +19,32 @@
 				<MenuItem Command="{Binding OpenSettingsWindow}" Header="設定" />
 			</MenuItem>
 		</Menu>
-		<Grid />
+		<ListView
+			DockPanel.Dock="Left"
+			ItemsSource="{Binding ItemSetList}"
+			SelectedItem="{Binding CurrentItemSet.Value}">
+			<ItemsControl.ItemTemplate>
+				<DataTemplate>
+					<TextBlock Text="{Binding Title.Value}" />
+				</DataTemplate>
+			</ItemsControl.ItemTemplate>
+		</ListView>
+		<StackPanel DataContext="{Binding CurrentItemSet.Value}">
+			<TextBlock Text="{Binding Title.Value}" />
+			<ItemsControl ItemsSource="{Binding Authors.Value}">
+				<ItemsControl.ItemsPanel>
+					<ItemsPanelTemplate>
+						<VirtualizingStackPanel Orientation="Horizontal" />
+					</ItemsPanelTemplate>
+				</ItemsControl.ItemsPanel>
+			</ItemsControl>
+			<ItemsControl ItemsSource="{Binding ItemList}">
+				<ItemsControl.ItemTemplate>
+					<DataTemplate>
+						<TextBlock Text="{Binding FilePath.Value}" />
+					</DataTemplate>
+				</ItemsControl.ItemTemplate>
+			</ItemsControl>
+		</StackPanel>
 	</DockPanel>
 </Window>

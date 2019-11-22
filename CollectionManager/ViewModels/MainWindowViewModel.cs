@@ -14,6 +14,10 @@ namespace CollectionManager.ViewModels {
 			get;
 		} = new ReactiveCollection<ItemSet>();
 
+		public IReactiveProperty<ItemSet> CurrentItemSet {
+			get;
+		} = new ReactivePropertySlim<ItemSet>();
+
 		public ReactiveCommand OpenSettingsWindow {
 			get;
 		} = new ReactiveCommand();
