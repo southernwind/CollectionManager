@@ -1,9 +1,11 @@
 using System;
 using System.IO;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 
 using CollectionManager.Composition.Base;
 using CollectionManager.Models;
+using Prism.Services.Dialogs;
 using Reactive.Bindings;
 
 namespace CollectionManager.ViewModels {
@@ -12,7 +14,11 @@ namespace CollectionManager.ViewModels {
 			get;
 		} = new ReactiveCollection<ItemSet>();
 
-		public MainWindowViewModel() {
+		public ReactiveCommand OpenSettingsWindow {
+			get;
+		} = new ReactiveCommand();
+
+		public MainWindowViewModel(IDialogService dialogService) {
 			var itemset = new ItemSet();
 			itemset.Authors.Value = new[] { "ADA" };
 			itemset.Title.Value = "Aqua Journal";
@@ -26,6 +32,10 @@ namespace CollectionManager.ViewModels {
 			itemset.ItemList.Add(item288);
 
 			this.ItemSetList.Add(itemset);
+
+			this.OpenSettingsWindow.Subscribe(x => {
+				dialogService.Show(nameof(Views.SettingsWindow),null, _=> {});
+			});
 		}
 	}
 }

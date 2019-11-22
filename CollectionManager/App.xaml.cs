@@ -1,6 +1,7 @@
 using System.Windows;
 using Prism.Ioc;
 using CollectionManager.Views;
+using CollectionManager.ViewModels;
 
 namespace CollectionManager {
 	/// <summary>
@@ -13,7 +14,7 @@ namespace CollectionManager {
 		}
 
 		protected override void RegisterTypes(IContainerRegistry containerRegistry) {
-
+			containerRegistry.RegisterDialog<SettingsWindow, SettingsWindowViewModel>();
 		}
 	}
 }
