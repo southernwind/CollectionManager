@@ -31,6 +31,7 @@
 		</ListView>
 		<StackPanel DataContext="{Binding CurrentItemSet.Value}">
 			<TextBlock Text="{Binding Title.Value}" />
+			<Button Command="{Binding OpenDirectoryCommand}" Content="ディレクトリを開く" />
 			<ItemsControl ItemsSource="{Binding Authors.Value}">
 				<ItemsControl.ItemsPanel>
 					<ItemsPanelTemplate>

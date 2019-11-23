@@ -1,9 +1,18 @@
+using System;
+using System.Diagnostics;
+using System.IO;
+
 using CollectionManager.Composition.Base;
 
 using Reactive.Bindings;
 
 namespace CollectionManager.Models {
 	internal class ItemSet : ModelBase {
+
+		public IReactiveProperty<string> DirectoryPath {
+			get;
+		} = new ReactivePropertySlim<string>();
+
 		public ReactiveCollection<Item> ItemList {
 			get;
 		} = new ReactiveCollection<Item>();
@@ -22,6 +31,14 @@ namespace CollectionManager.Models {
 
 		public ItemSet() {
 
+		}
+
+		public void OpenDirectory() {
+			try {
+				Process.Start("explorer.exe", $"\"{this.DirectoryPath.Value}\"");
+			} catch (Exception ex) {
+				Console.WriteLine(ex);
+			}
 		}
 	}
 }

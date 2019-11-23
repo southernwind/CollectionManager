@@ -1,44 +1,44 @@
 using System;
-using System.IO;
-using System.Security.Cryptography;
-using System.Threading.Tasks;
 
 using CollectionManager.Composition.Base;
 using CollectionManager.Models;
+
 using Prism.Services.Dialogs;
+
 using Reactive.Bindings;
 
 namespace CollectionManager.ViewModels {
 	internal class MainWindowViewModel : ViewModelBase {
-		public ReactiveCollection<ItemSet> ItemSetList {
+		public ReactiveCollection<ItemSetViewModel> ItemSetList {
 			get;
-		} = new ReactiveCollection<ItemSet>();
+		} = new ReactiveCollection<ItemSetViewModel>();
 
-		public IReactiveProperty<ItemSet> CurrentItemSet {
+		public IReactiveProperty<ItemSetViewModel> CurrentItemSet {
 			get;
-		} = new ReactivePropertySlim<ItemSet>();
+		} = new ReactivePropertySlim<ItemSetViewModel>();
 
 		public ReactiveCommand OpenSettingsWindow {
 			get;
 		} = new ReactiveCommand();
 
 		public MainWindowViewModel(IDialogService dialogService) {
-			var itemset = new ItemSet();
+			var itemset = new ItemSetViewModel();
 			itemset.Authors.Value = new[] { "ADA" };
+			itemset.DirectoryPath.Value = @"C:\test";
 			itemset.Title.Value = "Aqua Journal";
 			var item289 = new Item();
 			item289.FilePath.Value = "./[289]ネイチャーアクアリウム 陰性水草の印象.pdf";
 			item289.Ordinal.Value = new Ordinal() { Number = 289 };
-			itemset.ItemList.Add(item289);
+			itemset.AddItem(item289);
 			var item288 = new Item();
 			item288.FilePath.Value = "./[288]失われた潟／古木と芽吹き.pdf";
 			item288.Ordinal.Value = new Ordinal() { Number = 289 };
-			itemset.ItemList.Add(item288);
+			itemset.AddItem(item288);
 
 			this.ItemSetList.Add(itemset);
 
 			this.OpenSettingsWindow.Subscribe(x => {
-				dialogService.Show(nameof(Views.SettingsWindow),null, _=> {});
+				dialogService.Show(nameof(Views.SettingsWindow), null, _ => { });
 			});
 		}
 	}
