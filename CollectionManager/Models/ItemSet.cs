@@ -40,5 +40,15 @@ namespace CollectionManager.Models {
 				Console.WriteLine(ex);
 			}
 		}
+
+		public void Load() {
+			this.ItemList.Clear();
+			foreach (var file in Directory.EnumerateFiles(this.DirectoryPath.Value)) {
+				var item = new Item();
+				item.FilePath.Value = file;
+
+				this.ItemList.Add(item);
+			}
+		}
 	}
 }

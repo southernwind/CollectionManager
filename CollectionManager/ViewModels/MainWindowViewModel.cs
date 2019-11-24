@@ -1,5 +1,5 @@
 using System;
-
+using System.Reactive.Linq;
 using CollectionManager.Composition.Base;
 using CollectionManager.Models;
 
@@ -39,6 +39,10 @@ namespace CollectionManager.ViewModels {
 
 			this.OpenSettingsWindow.Subscribe(x => {
 				dialogService.Show(nameof(Views.SettingsWindow), null, _ => { });
+			});
+
+			this.CurrentItemSet.Where(x => x != null).Subscribe(x => {
+				x.LoadCommand.Execute();
 			});
 		}
 	}

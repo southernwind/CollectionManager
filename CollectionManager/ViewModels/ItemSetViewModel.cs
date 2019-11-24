@@ -33,6 +33,10 @@ namespace CollectionManager.ViewModels {
 			set;
 		} = new ReactiveCommand();
 
+		public ReactiveCommand LoadCommand {
+			get;
+		} = new ReactiveCommand();
+
 		public ItemSetViewModel() {
 			this._model = new ItemSet();
 			this.DirectoryPath = this._model.DirectoryPath.ToReactivePropertyAsSynchronized(x => x.Value);
@@ -42,7 +46,7 @@ namespace CollectionManager.ViewModels {
 			this.Note = this._model.Note.ToReactivePropertyAsSynchronized(x => x.Value);
 
 			this.OpenDirectoryCommand.Subscribe(this._model.OpenDirectory);
-			;
+			this.LoadCommand.Subscribe(this._model.Load);
 		}
 
 		public void AddItem(Item item) {
