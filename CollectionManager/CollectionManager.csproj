@@ -8,6 +8,7 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\CollectionManager.Composition\CollectionManager.Composition.csproj" />
+    <ProjectReference Include="..\CollectionManager.DataBase\CollectionManager.DataBase.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="ReactiveProperty" />
