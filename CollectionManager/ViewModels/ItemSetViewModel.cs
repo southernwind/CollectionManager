@@ -28,6 +28,10 @@ namespace CollectionManager.ViewModels {
 			get;
 		}
 
+		public IReactiveProperty<string> OrdinalRegex {
+			get;
+		}
+
 		public ReactiveCommand OpenDirectoryCommand {
 			get;
 			set;
@@ -44,6 +48,7 @@ namespace CollectionManager.ViewModels {
 			this.Title = this._model.Title.ToReactivePropertyAsSynchronized(x => x.Value);
 			this.Authors = this._model.Authors.ToReactivePropertyAsSynchronized(x => x.Value);
 			this.Note = this._model.Note.ToReactivePropertyAsSynchronized(x => x.Value);
+			this.OrdinalRegex = this._model.OrdinalRegex.ToReactivePropertyAsSynchronized(x => x.Value);
 
 			this.OpenDirectoryCommand.Subscribe(this._model.OpenDirectory);
 			this.LoadCommand.Subscribe(this._model.Load);

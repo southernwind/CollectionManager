@@ -44,7 +44,6 @@ namespace CollectionManager.DataBase {
 				.HasOne(x => x.ItemSet)
 				.WithMany(x => x.Authors)
 				.OnDelete(DeleteBehavior.Cascade);
-
 		}
 
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {

@@ -31,6 +31,7 @@
 		</ListView>
 		<StackPanel DataContext="{Binding CurrentItemSet.Value}">
 			<TextBlock Text="{Binding Title.Value}" />
+			<TextBox Text="{Binding OrdinalRegex.Value}" />
 			<Button Command="{Binding OpenDirectoryCommand}" Content="ディレクトリを開く" />
 			<ItemsControl ItemsSource="{Binding Authors.Value}">
 				<ItemsControl.ItemsPanel>
@@ -42,7 +43,10 @@
 			<ItemsControl ItemsSource="{Binding ItemList}">
 				<ItemsControl.ItemTemplate>
 					<DataTemplate>
-						<TextBlock Text="{Binding FilePath.Value}" />
+						<StackPanel>
+							<TextBlock Text="{Binding FilePath.Value}" />
+							<TextBlock Text="{Binding Ordinal.Value.Number}" />
+						</StackPanel>
 					</DataTemplate>
 				</ItemsControl.ItemTemplate>
 			</ItemsControl>
