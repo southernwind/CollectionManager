@@ -1,6 +1,7 @@
 using System.Windows;
-
+using CollectionManager.Composition.Settings;
 using CollectionManager.DataBase;
+using CollectionManager.Models.Settings;
 using CollectionManager.ViewModels;
 using CollectionManager.Views;
 
@@ -26,6 +27,7 @@ namespace CollectionManager {
 		}
 
 		protected override void RegisterTypes(IContainerRegistry containerRegistry) {
+			containerRegistry.Register<ISettings, Settings>();
 			containerRegistry.RegisterDialog<SettingsWindow, SettingsWindowViewModel>();
 		}
 	}
