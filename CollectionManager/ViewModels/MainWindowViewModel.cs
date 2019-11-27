@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Reactive.Linq;
 using CollectionManager.Composition.Base;
 using CollectionManager.Models;
@@ -36,6 +37,7 @@ namespace CollectionManager.ViewModels {
 			itemset.AddItem(item288);
 
 			this.ItemSetList.Add(itemset);
+			this.CurrentItemSet.Value = this.ItemSetList.First();
 
 			this.OpenSettingsWindow.Subscribe(x => {
 				dialogService.Show(nameof(Views.SettingsWindow), null, _ => { });
