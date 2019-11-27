@@ -29,25 +29,44 @@
 				</DataTemplate>
 			</ItemsControl.ItemTemplate>
 		</ListView>
-		<StackPanel DataContext="{Binding CurrentItemSet.Value}">
-			<TextBlock Text="{Binding Title.Value}" />
-			<TextBox Text="{Binding OrdinalRegex.Value}" />
-			<TextBlock>
-				<Run Text="最小" />
-				<Run Text="{Binding Min.Value, Mode=OneWay}" />
-				<Run Text=" " />
-				<Run Text="最大" />
-				<Run Text="{Binding Max.Value, Mode=OneWay}" />
-			</TextBlock>
-			<Button Command="{Binding OpenDirectoryCommand}" Content="ディレクトリを開く" />
-			<ItemsControl ItemsSource="{Binding Authors.Value}">
-				<ItemsControl.ItemsPanel>
-					<ItemsPanelTemplate>
-						<VirtualizingStackPanel Orientation="Horizontal" />
-					</ItemsPanelTemplate>
-				</ItemsControl.ItemsPanel>
-			</ItemsControl>
-			<ItemsControl ItemsSource="{Binding ItemList}">
+		<Grid DataContext="{Binding CurrentItemSet.Value}">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="*" />
+			</Grid.RowDefinitions>
+			<StackPanel Grid.Row="0">
+				<TextBlock FontSize="18" Text="{Binding Title.Value}" />
+				<DockPanel>
+					<StackPanel DockPanel.Dock="Left">
+						<TextBlock Text="正規表現" />
+						<TextBox Width="200" Text="{Binding OrdinalRegex.Value}" />
+					</StackPanel>
+					<Button
+						Command="{Binding OpenDirectoryCommand}"
+						Content="ディレクトリを開く"
+						DockPanel.Dock="Right" />
+					<StackPanel DockPanel.Dock="Right">
+						<TextBlock>
+							<Run Text="最小" />
+							<Run Text="{Binding Min.Value, Mode=OneWay}" />
+						</TextBlock>
+						<TextBlock>
+							<Run Text="最大" />
+							<Run Text="{Binding Max.Value, Mode=OneWay}" />
+						</TextBlock>
+					</StackPanel>
+					<Grid />
+				</DockPanel>
+				<ItemsControl ItemsSource="{Binding Authors.Value}">
+					<ItemsControl.ItemsPanel>
+						<ItemsPanelTemplate>
+							<VirtualizingStackPanel Orientation="Horizontal" />
+						</ItemsPanelTemplate>
+					</ItemsControl.ItemsPanel>
+				</ItemsControl>
+			</StackPanel>
+			<ItemsControl Grid.Row="2" ItemsSource="{Binding ItemList}">
 				<ItemsControl.ItemTemplate>
 					<DataTemplate>
 						<StackPanel>
@@ -57,6 +76,6 @@
 					</DataTemplate>
 				</ItemsControl.ItemTemplate>
 			</ItemsControl>
-		</StackPanel>
+		</Grid>
 	</DockPanel>
 </Window>
