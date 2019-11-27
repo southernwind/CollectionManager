@@ -32,6 +32,14 @@ namespace CollectionManager.ViewModels {
 			get;
 		}
 
+		public IReadOnlyReactiveProperty<double> Min {
+			get;
+		}
+
+		public IReadOnlyReactiveProperty<double> Max {
+			get;
+		}
+
 		public ReactiveCommand OpenDirectoryCommand {
 			get;
 			set;
@@ -49,6 +57,8 @@ namespace CollectionManager.ViewModels {
 			this.Authors = this._model.Authors.ToReactivePropertyAsSynchronized(x => x.Value);
 			this.Note = this._model.Note.ToReactivePropertyAsSynchronized(x => x.Value);
 			this.OrdinalRegex = this._model.OrdinalRegex.ToReactivePropertyAsSynchronized(x => x.Value);
+			this.Min = this._model.Min.ToReadOnlyReactivePropertySlim();
+			this.Max = this._model.Max.ToReadOnlyReactivePropertySlim();
 
 			this.OpenDirectoryCommand.Subscribe(this._model.OpenDirectory);
 			this.LoadCommand.Subscribe(this._model.Load);

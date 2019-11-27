@@ -32,6 +32,13 @@
 		<StackPanel DataContext="{Binding CurrentItemSet.Value}">
 			<TextBlock Text="{Binding Title.Value}" />
 			<TextBox Text="{Binding OrdinalRegex.Value}" />
+			<TextBlock>
+				<Run Text="最小" />
+				<Run Text="{Binding Min.Value, Mode=OneWay}" />
+				<Run Text=" " />
+				<Run Text="最大" />
+				<Run Text="{Binding Max.Value, Mode=OneWay}" />
+			</TextBlock>
 			<Button Command="{Binding OpenDirectoryCommand}" Content="ディレクトリを開く" />
 			<ItemsControl ItemsSource="{Binding Authors.Value}">
 				<ItemsControl.ItemsPanel>
