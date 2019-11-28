@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+
 using CollectionManager.Composition.Base;
 
 using Reactive.Bindings;
@@ -42,7 +43,7 @@ namespace CollectionManager.Models {
 		public IReactiveProperty<double> Max {
 			get;
 		} = new ReactivePropertySlim<double>();
-		
+
 		public ItemSet() {
 			this.ItemList.CollectionChangedAsObservable().Subscribe(x => {
 				if (!this.ItemList.Any()) {
@@ -53,7 +54,7 @@ namespace CollectionManager.Models {
 				this.Min.Value = this.ItemList.Select(x => x.Ordinal.Value.Number).Min();
 				this.Max.Value = this.ItemList.Select(x => x.Ordinal.Value.Number).Max();
 			});
-			
+
 		}
 
 		public void OpenDirectory() {
@@ -68,10 +69,13 @@ namespace CollectionManager.Models {
 			this.ItemList.Clear();
 			var regex = new Regex(this.OrdinalRegex.Value);
 			foreach (var file in Directory.EnumerateFiles(this.DirectoryPath.Value)) {
+				var match = regex.Match(Path.GetFileName(file));
+				if (!match.Success) {
+					return;
+				}
 				var item = new Item();
 				item.FilePath.Value = file;
-				var match = regex.Match(Path.GetFileName(file));
-				item.Ordinal.Value = new Ordinal() { Number = int.Parse(match.Groups["number"].Value)};
+				item.Ordinal.Value = new Ordinal() { Number = int.Parse(match.Groups["number"].Value) };
 				this.ItemList.Add(item);
 			}
 		}
