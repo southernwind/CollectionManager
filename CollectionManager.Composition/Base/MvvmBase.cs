@@ -12,6 +12,9 @@ namespace CollectionManager.Composition.Base {
 			}
 		}
 
+		private protected ModelBaseCore() {
+		}
+
 		/// <summary>
 		/// Dispose
 		/// </summary>
