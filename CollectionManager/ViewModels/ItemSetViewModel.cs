@@ -50,18 +50,18 @@ namespace CollectionManager.ViewModels {
 		} = new ReactiveCommand();
 
 		public ItemSetViewModel() {
-			this._model = new ItemSet();
-			this.DirectoryPath = this._model.DirectoryPath.ToReactivePropertyAsSynchronized(x => x.Value);
-			this.ItemList = this._model.ItemList.ToReadOnlyReactiveCollection();
-			this.Title = this._model.Title.ToReactivePropertyAsSynchronized(x => x.Value);
-			this.Authors = this._model.Authors.ToReactivePropertyAsSynchronized(x => x.Value);
-			this.Note = this._model.Note.ToReactivePropertyAsSynchronized(x => x.Value);
-			this.OrdinalRegex = this._model.OrdinalRegex.ToReactivePropertyAsSynchronized(x => x.Value);
-			this.Min = this._model.Min.ToReadOnlyReactivePropertySlim();
-			this.Max = this._model.Max.ToReadOnlyReactivePropertySlim();
+			this._model = new ItemSet().AddTo(this.CompositeDisposable);
+			this.DirectoryPath = this._model.DirectoryPath.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
+			this.ItemList = this._model.ItemList.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
+			this.Title = this._model.Title.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
+			this.Authors = this._model.Authors.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
+			this.Note = this._model.Note.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
+			this.OrdinalRegex = this._model.OrdinalRegex.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
+			this.Min = this._model.Min.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
+			this.Max = this._model.Max.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 
-			this.OpenDirectoryCommand.Subscribe(this._model.OpenDirectory);
-			this.LoadCommand.Subscribe(this._model.Load);
+			this.OpenDirectoryCommand.Subscribe(this._model.OpenDirectory).AddTo(this.CompositeDisposable);
+			this.LoadCommand.Subscribe(this._model.Load).AddTo(this.CompositeDisposable);
 		}
 
 		public void AddItem(Item item) {

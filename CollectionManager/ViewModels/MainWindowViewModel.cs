@@ -1,12 +1,14 @@
 using System;
 using System.Linq;
 using System.Reactive.Linq;
+
 using CollectionManager.Composition.Base;
 using CollectionManager.Models;
 
 using Prism.Services.Dialogs;
 
 using Reactive.Bindings;
+using Reactive.Bindings.Extensions;
 
 namespace CollectionManager.ViewModels {
 	internal class MainWindowViewModel : ViewModelBase {
@@ -23,7 +25,7 @@ namespace CollectionManager.ViewModels {
 		} = new ReactiveCommand();
 
 		public MainWindowViewModel(IDialogService dialogService) {
-			var itemset = new ItemSetViewModel();
+			var itemset = new ItemSetViewModel().AddTo(this.CompositeDisposable);
 			itemset.Authors.Value = new[] { "ADA" };
 			itemset.DirectoryPath.Value = @"C:\test";
 			itemset.Title.Value = "Aqua Journal";
@@ -41,11 +43,11 @@ namespace CollectionManager.ViewModels {
 
 			this.OpenSettingsWindow.Subscribe(x => {
 				dialogService.Show(nameof(Views.SettingsWindow), null, _ => { });
-			});
+			}).AddTo(this.CompositeDisposable);
 
 			this.CurrentItemSet.Where(x => x != null).Subscribe(x => {
 				x.LoadCommand.Execute();
-			});
+			}).AddTo(this.CompositeDisposable);
 		}
 	}
 }

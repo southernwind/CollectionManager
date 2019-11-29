@@ -53,8 +53,7 @@ namespace CollectionManager.Models {
 				}
 				this.Min.Value = this.ItemList.Select(x => x.Ordinal.Value.Number).Min();
 				this.Max.Value = this.ItemList.Select(x => x.Ordinal.Value.Number).Max();
-			});
-
+			}).AddTo(this.CompositeDisposable);
 		}
 
 		public void OpenDirectory() {
