@@ -7,7 +7,9 @@ using Reactive.Bindings.Extensions;
 
 namespace CollectionManager.ViewModels {
 	internal class ItemSetViewModel : ViewModelBase {
-		private readonly ItemSet _model;
+		public ItemSet Model {
+			get;
+		}
 		public IReactiveProperty<string> DirectoryPath {
 			get;
 		}
@@ -49,23 +51,19 @@ namespace CollectionManager.ViewModels {
 			get;
 		} = new ReactiveCommand();
 
-		public ItemSetViewModel() {
-			this._model = new ItemSet().AddTo(this.CompositeDisposable);
-			this.DirectoryPath = this._model.DirectoryPath.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
-			this.ItemList = this._model.ItemList.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
-			this.Title = this._model.Title.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
-			this.Authors = this._model.Authors.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
-			this.Note = this._model.Note.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
-			this.OrdinalRegex = this._model.OrdinalRegex.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
-			this.Min = this._model.Min.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
-			this.Max = this._model.Max.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
+		public ItemSetViewModel(ItemSet model) {
+			this.Model = model;
+			this.DirectoryPath = this.Model.DirectoryPath.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
+			this.ItemList = this.Model.ItemList.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
+			this.Title = this.Model.Title.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
+			this.Authors = this.Model.Authors.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
+			this.Note = this.Model.Note.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
+			this.OrdinalRegex = this.Model.OrdinalRegex.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
+			this.Min = this.Model.Min.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
+			this.Max = this.Model.Max.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 
-			this.OpenDirectoryCommand.Subscribe(this._model.OpenDirectory).AddTo(this.CompositeDisposable);
-			this.LoadCommand.Subscribe(this._model.Load).AddTo(this.CompositeDisposable);
-		}
-
-		public void AddItem(Item item) {
-			this._model.ItemList.Add(item);
+			this.OpenDirectoryCommand.Subscribe(this.Model.OpenDirectory).AddTo(this.CompositeDisposable);
+			this.LoadCommand.Subscribe(this.Model.Load).AddTo(this.CompositeDisposable);
 		}
 	}
 }
