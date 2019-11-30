@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 
 using CollectionManager.Composition.Base;
+using CollectionManager.Composition.Enums;
 using CollectionManager.Composition.Settings;
 using CollectionManager.DataBase;
 
@@ -22,9 +23,20 @@ namespace CollectionManager.Models {
 			get;
 		} = new ReactivePropertySlim<ItemSet>();
 
+		/// <summary>
+		/// 表示する列
+		/// </summary>
+		public ReadOnlyReactiveCollection<Col> Columns {
+			get;
+		}
+
 		public Shelf(ISettings settings, CollectionManagerDbContext database) {
 			this._settings = settings;
 			this._database = database;
+
+			var cols = new ReactiveCollection<Col>();
+			cols.AddRange(new[] { new Col(AvailableColumns.Title), new Col(AvailableColumns.Max) });
+			this.Columns = cols.ToReadOnlyReactiveCollection();
 		}
 
 		public void Load() {
@@ -42,6 +54,16 @@ namespace CollectionManager.Models {
 
 				return itemSet;
 			}));
+		}
+	}
+
+	internal class Col {
+		public AvailableColumns AlternateKey {
+			get;
+		}
+
+		public Col(AvailableColumns alternateKey) {
+			this.AlternateKey = alternateKey;
 		}
 	}
 }

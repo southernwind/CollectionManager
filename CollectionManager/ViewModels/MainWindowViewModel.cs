@@ -24,12 +24,17 @@ namespace CollectionManager.ViewModels {
 			get;
 		} = new ReactiveCommand();
 
+		public ReadOnlyReactiveCollection<Col> Columns {
+			get;
+		}
+
 		public MainWindowViewModel(IDialogService dialogService, Shelf shelf) {
 			this.ItemSetList = shelf.ItemSetList.ToReadOnlyReactiveCollection(x => new ItemSetViewModel(x)).AddTo(this.CompositeDisposable);
 			this.CurrentItemSet = shelf.CurrentItemSet.ToReactivePropertyAsSynchronized(
 				x => x.Value,
 				x => x == null ? null : new ItemSetViewModel(x),
 				x => x?.Model);
+			this.Columns = shelf.Columns.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
 
 			this.OpenSettingsWindow.Subscribe(x => {
 				dialogService.Show(nameof(Views.SettingsWindow), null, _ => { });
