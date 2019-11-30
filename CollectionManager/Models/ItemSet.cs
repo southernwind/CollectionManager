@@ -2,19 +2,30 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Text.RegularExpressions;
 
 using CollectionManager.Composition.Base;
+using CollectionManager.DataBase;
+using CollectionManager.DataBase.Tables;
+
+using Microsoft.EntityFrameworkCore;
 
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 namespace CollectionManager.Models {
 	internal class ItemSet : ModelBase {
+		private readonly CollectionManagerDbContext _database;
 
-		public IReactiveProperty<string> DirectoryPath {
+		/// <summary>
+		/// アイテムセットID
+		/// </summary>
+		private int _itemSetId;
+
+		public string DirectoryPath {
 			get;
-		} = new ReactivePropertySlim<string>();
+		}
 
 		public ReactiveCollection<Item> ItemList {
 			get;
@@ -36,38 +47,77 @@ namespace CollectionManager.Models {
 			get;
 		} = new ReactivePropertySlim<string>(@"^\[(?<number>\d+)\].*$");
 
-		public IReactiveProperty<double> Min {
+		public IReactiveProperty<double?> Min {
 			get;
-		} = new ReactivePropertySlim<double>();
+		} = new ReactivePropertySlim<double?>();
 
-		public IReactiveProperty<double> Max {
+		public IReactiveProperty<double?> Max {
 			get;
-		} = new ReactivePropertySlim<double>();
+		} = new ReactivePropertySlim<double?>();
 
-		public ItemSet() {
-			this.ItemList.CollectionChangedAsObservable().Subscribe(x => {
+		public ItemSet(string directoryPath, CollectionManagerDbContext database) {
+			this.DirectoryPath = directoryPath;
+			this._database = database;
+
+			this.ItemList.CollectionChangedAsObservable().Subscribe(_ => {
 				if (!this.ItemList.Any()) {
-					this.Min.Value = double.NaN;
-					this.Max.Value = double.NaN;
+					this.Min.Value = null;
+					this.Max.Value = null;
 					return;
 				}
 				this.Min.Value = this.ItemList.Select(x => x.Ordinal.Value.Number).Min();
 				this.Max.Value = this.ItemList.Select(x => x.Ordinal.Value.Number).Max();
 			}).AddTo(this.CompositeDisposable);
+
+			this.Min.ToUnit()
+				.Merge(this.Max.ToUnit())
+				.Merge(this.OrdinalRegex.ToUnit())
+				.Merge(this.Note.ToUnit())
+				.Merge(this.Title.ToUnit())
+				.Merge(this.Authors.ToUnit())
+				.Where(_ => this._itemSetId != default)
+				.Subscribe(_ => this.Update())
+				.AddTo(this.CompositeDisposable);
 		}
 
 		public void OpenDirectory() {
 			try {
-				Process.Start("explorer.exe", $"\"{this.DirectoryPath.Value}\"");
+				Process.Start("explorer.exe", $"\"{this.DirectoryPath}\"");
 			} catch (Exception ex) {
 				Console.WriteLine(ex);
 			}
 		}
 
-		public void Load() {
+		/// <summary>
+		/// データベースレコードの作成
+		/// </summary>
+		public void Create() {
+			var row = new DataBase.Tables.ItemSet {
+				DirectoryPath = this.DirectoryPath,
+				OrdinalRegex = this.OrdinalRegex.Value
+			};
+			this._database.ItemSets.Add(row);
+			this._database.SaveChanges();
+			this._itemSetId = row.ItemSetId;
+		}
+
+		public void LoadDatabase(DataBase.Tables.ItemSet row) {
+			this.Authors.Value = row.Authors?.Select(x => x.Name).ToArray();
+			this.Note.Value = row.Note;
+			this.Min.Value = row.Min;
+			this.Max.Value = row.Max;
+			this.OrdinalRegex.Value = row.OrdinalRegex;
+
+			this._itemSetId = row.ItemSetId;
+		}
+
+		/// <summary>
+		/// ファイル読み込み
+		/// </summary>
+		public void LoadActualFiles() {
 			this.ItemList.Clear();
 			var regex = new Regex(this.OrdinalRegex.Value);
-			foreach (var file in Directory.EnumerateFiles(this.DirectoryPath.Value)) {
+			foreach (var file in Directory.EnumerateFiles(this.DirectoryPath)) {
 				var match = regex.Match(Path.GetFileName(file));
 				if (!match.Success) {
 					return;
@@ -77,6 +127,20 @@ namespace CollectionManager.Models {
 				item.Ordinal.Value = new Ordinal() { Number = int.Parse(match.Groups["number"].Value) };
 				this.ItemList.Add(item);
 			}
+		}
+
+		/// <summary>
+		/// データベース情報最新化
+		/// </summary>
+		private void Update() {
+			var row = this._database.ItemSets.Include(x => x.Authors).First(x => x.ItemSetId == this._itemSetId);
+			this._database.ItemSetAuthors.RemoveRange(row.Authors);
+			row.Authors = this.Authors.Value?.Select(x => new ItemSetAuthor { Name = x }).ToArray() ?? Array.Empty<ItemSetAuthor>();
+			row.Note = this.Note.Value;
+			row.Min = this.Min.Value;
+			row.Max = this.Max.Value;
+			row.OrdinalRegex = this.OrdinalRegex.Value;
+			this._database.SaveChanges();
 		}
 	}
 }

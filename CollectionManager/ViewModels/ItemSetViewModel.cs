@@ -10,8 +10,10 @@ namespace CollectionManager.ViewModels {
 		public ItemSet Model {
 			get;
 		}
-		public IReactiveProperty<string> DirectoryPath {
-			get;
+		public string DirectoryPath {
+			get {
+				return this.Model.DirectoryPath;
+			}
 		}
 
 		public ReadOnlyReactiveCollection<Item> ItemList {
@@ -34,11 +36,11 @@ namespace CollectionManager.ViewModels {
 			get;
 		}
 
-		public IReadOnlyReactiveProperty<double> Min {
+		public IReadOnlyReactiveProperty<double?> Min {
 			get;
 		}
 
-		public IReadOnlyReactiveProperty<double> Max {
+		public IReadOnlyReactiveProperty<double?> Max {
 			get;
 		}
 
@@ -47,13 +49,12 @@ namespace CollectionManager.ViewModels {
 			set;
 		} = new ReactiveCommand();
 
-		public ReactiveCommand LoadCommand {
+		public ReactiveCommand LoadActualFilesCommand {
 			get;
 		} = new ReactiveCommand();
 
 		public ItemSetViewModel(ItemSet model) {
 			this.Model = model;
-			this.DirectoryPath = this.Model.DirectoryPath.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
 			this.ItemList = this.Model.ItemList.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
 			this.Title = this.Model.Title.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
 			this.Authors = this.Model.Authors.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
@@ -63,7 +64,7 @@ namespace CollectionManager.ViewModels {
 			this.Max = this.Model.Max.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 
 			this.OpenDirectoryCommand.Subscribe(this.Model.OpenDirectory).AddTo(this.CompositeDisposable);
-			this.LoadCommand.Subscribe(this.Model.Load).AddTo(this.CompositeDisposable);
+			this.LoadActualFilesCommand.Subscribe(this.Model.LoadActualFiles).AddTo(this.CompositeDisposable);
 		}
 	}
 }

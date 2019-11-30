@@ -17,12 +17,6 @@ namespace CollectionManager {
 	public partial class App {
 		private ISettings _settings;
 		protected override Window CreateShell() {
-			// DataBase
-			var sb = new SqliteConnectionStringBuilder {
-				DataSource = "./database.db"
-			};
-			var dbContext = new CollectionManagerDbContext(new SqliteConnection(sb.ConnectionString));
-			dbContext.Database.EnsureCreated();
 			return this.Container.Resolve<MainWindow>();
 		}
 
@@ -30,6 +24,14 @@ namespace CollectionManager {
 			this._settings = new Settings("./settings.conf");
 			this._settings.Load();
 			containerRegistry.RegisterInstance(this._settings);
+
+			// DataBase
+			var sb = new SqliteConnectionStringBuilder {
+				DataSource = "./database.db"
+			};
+			var dbContext = new CollectionManagerDbContext(new SqliteConnection(sb.ConnectionString));
+			dbContext.Database.EnsureCreated();
+			containerRegistry.RegisterInstance(dbContext);
 			containerRegistry.RegisterDialog<SettingsWindow, SettingsWindowViewModel>();
 		}
 

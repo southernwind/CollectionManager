@@ -36,7 +36,7 @@ namespace CollectionManager.ViewModels {
 			}).AddTo(this.CompositeDisposable);
 
 			this.CurrentItemSet.Where(x => x != null).Subscribe(x => {
-				x.LoadCommand.Execute();
+				x.LoadActualFilesCommand.Execute();
 			}).AddTo(this.CompositeDisposable);
 			shelf.Load();
 		}

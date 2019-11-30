@@ -23,6 +23,21 @@ namespace CollectionManager.DataBase.Tables {
 			set;
 		}
 
+		public double? Min {
+			get;
+			set;
+		}
+
+		public double? Max {
+			get;
+			set;
+		}
+
+		public string OrdinalRegex {
+			get;
+			set;
+		}
+
 		public virtual ICollection<Item> Items {
 			get;
 			set;
