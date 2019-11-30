@@ -43,9 +43,9 @@ namespace CollectionManager.Models {
 			get;
 		} = new ReactivePropertySlim<string>();
 
-		public IReactiveProperty<string> OrdinalRegex {
+		public ReactiveProperty<string> OrdinalRegex {
 			get;
-		} = new ReactivePropertySlim<string>(@"^\[(?<number>\d+)\].*$");
+		} = new ReactiveProperty<string>(@"^\[(?<number>\d+)\].*$");
 
 		public IReactiveProperty<double?> Min {
 			get;
@@ -65,8 +65,8 @@ namespace CollectionManager.Models {
 					this.Max.Value = null;
 					return;
 				}
-				this.Min.Value = this.ItemList.Select(x => x.Ordinal.Value.Number).Min();
-				this.Max.Value = this.ItemList.Select(x => x.Ordinal.Value.Number).Max();
+				this.Min.Value = this.ItemList.Select(x => x.Ordinal.Value?.Number).Min();
+				this.Max.Value = this.ItemList.Select(x => x.Ordinal.Value?.Number).Max();
 			}).AddTo(this.CompositeDisposable);
 
 			this.Min.ToUnit()
@@ -78,6 +78,24 @@ namespace CollectionManager.Models {
 				.Where(_ => this._itemSetId != default)
 				.Subscribe(_ => this.Update())
 				.AddTo(this.CompositeDisposable);
+
+			this.OrdinalRegex.SetValidateNotifyError(x => {
+				try {
+					_ = new Regex(x);
+					return null;
+				} catch {
+					return "正規表現検証エラー";
+				}
+			});
+			this.OrdinalRegex.Where(x => !this.OrdinalRegex.HasErrors).Subscribe(x => {
+				var regex = new Regex(this.OrdinalRegex.Value);
+				foreach (var item in this.ItemList) {
+					var match = regex.Match(Path.GetFileName(item.FilePath.Value));
+					if (match.Success) {
+						item.Ordinal.Value = new Ordinal { Number = int.Parse(match.Groups["number"].Value) };
+					}
+				}
+			});
 		}
 
 		public void OpenDirectory() {
@@ -116,15 +134,20 @@ namespace CollectionManager.Models {
 		/// </summary>
 		public void LoadActualFiles() {
 			this.ItemList.Clear();
-			var regex = new Regex(this.OrdinalRegex.Value);
+			Regex regex = null;
+			try {
+				regex = new Regex(this.OrdinalRegex.Value);
+			} catch {
+				Console.WriteLine("正規表現検証エラー");
+			}
 			foreach (var file in Directory.EnumerateFiles(this.DirectoryPath)) {
-				var match = regex.Match(Path.GetFileName(file));
-				if (!match.Success) {
-					return;
-				}
+				var match = regex?.Match(Path.GetFileName(file));
 				var item = new Item();
 				item.FilePath.Value = file;
-				item.Ordinal.Value = new Ordinal() { Number = int.Parse(match.Groups["number"].Value) };
+				if (match?.Success ?? false) {
+					item.Ordinal.Value = new Ordinal { Number = int.Parse(match.Groups["number"].Value) };
+				}
+
 				this.ItemList.Add(item);
 			}
 		}
