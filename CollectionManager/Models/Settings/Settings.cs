@@ -17,6 +17,13 @@ namespace CollectionManager.Models.Settings {
 			get;
 		} = new SettingsCollection<string>(Array.Empty<string>());
 
+		/// <summary>
+		/// 対象拡張子
+		/// </summary>
+		public SettingsCollection<string> TargetExtensions {
+			get;
+		} = new SettingsCollection<string>(".pdf");
+
 		[Obsolete("for serialize")]
 		public Settings() {
 		}

@@ -1,4 +1,5 @@
 using System;
+using System.Reactive.Linq;
 using System.Windows.Forms;
 
 using CollectionManager.Composition.Base;
@@ -24,6 +25,31 @@ namespace CollectionManager.ViewModels {
 			get;
 		} = new ReactiveProperty<string>();
 
+		public IReactiveProperty<string> InputExtension {
+			get;
+		} = new ReactiveProperty<string>();
+
+		/// <summary>
+		/// 対象拡張子
+		/// </summary>
+		public ReadOnlyReactiveCollection<string> TargetExtensions {
+			get;
+		}
+
+		/// <summary>
+		/// 対象拡張子追加
+		/// </summary>
+		public ReactiveCommand AddExtensionCommand {
+			get;
+		}
+
+		/// <summary>
+		/// 対象拡張子削除
+		/// </summary>
+		public ReactiveCommand<string> RemoveExtensionCommand {
+			get;
+		} = new ReactiveCommand<string>();
+
 		/// <summary>
 		/// スキャン設定追加
 		/// </summary>
@@ -40,7 +66,7 @@ namespace CollectionManager.ViewModels {
 
 		public SettingsWindowViewModel(ISettings settings) {
 			this.ScanDirectories = settings.ScanDirectories.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
-
+			this.TargetExtensions = settings.TargetExtensions.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
 			this.AddScanDirectoryCommand.Subscribe(() => {
 				var fbd = new FolderBrowserDialog();
 				if (fbd.ShowDialog() == DialogResult.OK) {
@@ -50,6 +76,14 @@ namespace CollectionManager.ViewModels {
 			this.RemoveScanDirectoryCommand.Subscribe(() => {
 				settings.ScanDirectories.Remove(this.SelectedScanDirectory.Value);
 			});
+
+			this.AddExtensionCommand = this.InputExtension.Select(x => x?.StartsWith(".") ?? false).ToReactiveCommand()
+				.WithSubscribe(() => {
+					settings.TargetExtensions.Add(this.InputExtension.Value);
+					this.InputExtension.Value = null;
+				}).AddTo(this.CompositeDisposable);
+
+			this.RemoveExtensionCommand.Subscribe(x => settings.TargetExtensions.Remove(x)).AddTo(this.CompositeDisposable);
 		}
 
 		public bool CanCloseDialog() {

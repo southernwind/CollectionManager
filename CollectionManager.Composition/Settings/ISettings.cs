@@ -10,6 +10,13 @@ namespace CollectionManager.Composition.Settings {
 		}
 
 		/// <summary>
+		/// スキャン設定
+		/// </summary>
+		SettingsCollection<string> TargetExtensions {
+			get;
+		}
+
+		/// <summary>
 		/// 保存
 		/// </summary>
 		void Save();

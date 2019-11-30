@@ -8,29 +8,52 @@
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:prism="http://prismlibrary.com/"
 	xmlns:vm="clr-namespace:CollectionManager.ViewModels"
-	Width="300"
-	Height="300"
 	d:DataContext="{d:DesignInstance vm:SettingsWindowViewModel}"
 	prism:ViewModelLocator.AutoWireViewModel="True"
 	mc:Ignorable="d">
-	<Grid>
-		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="*" />
-			<ColumnDefinition Width="Auto" />
-		</Grid.ColumnDefinitions>
-		<ListBox
-			Grid.Column="0"
-			ItemsSource="{Binding ScanDirectories}"
-			SelectedItem="{Binding SelectedScanDirectory.Value}">
-			<ItemsControl.ItemTemplate>
-				<DataTemplate>
-					<TextBlock Text="{Binding}" />
-				</DataTemplate>
-			</ItemsControl.ItemTemplate>
-		</ListBox>
-		<StackPanel Grid.Column="1">
-			<Button Command="{Binding AddScanDirectoryCommand}" Content="追加" />
-			<Button Command="{Binding RemoveScanDirectoryCommand}" Content="削除" />
+	<ScrollViewer>
+		<StackPanel MinWidth="300">
+			<Grid>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="*" />
+					<ColumnDefinition Width="Auto" />
+				</Grid.ColumnDefinitions>
+				<ListBox
+					Grid.Column="0"
+					ItemsSource="{Binding ScanDirectories}"
+					SelectedItem="{Binding SelectedScanDirectory.Value}">
+					<ItemsControl.ItemTemplate>
+						<DataTemplate>
+							<TextBlock Text="{Binding}" />
+						</DataTemplate>
+					</ItemsControl.ItemTemplate>
+				</ListBox>
+				<StackPanel Grid.Column="1">
+					<Button Command="{Binding AddScanDirectoryCommand}" Content="追加" />
+					<Button Command="{Binding RemoveScanDirectoryCommand}" Content="削除" />
+				</StackPanel>
+			</Grid>
+			<StackPanel>
+				<TextBlock Text="管理対象拡張子" TextAlignment="Center" />
+				<ListBox Height="200" ItemsSource="{Binding TargetExtensions}">
+					<ItemsControl.InputBindings>
+						<KeyBinding
+							Key="Delete"
+							Command="{Binding RemoveExtensionCommand}"
+							CommandParameter="{Binding SelectedItem, RelativeSource={RelativeSource AncestorType=ListBox}}" />
+					</ItemsControl.InputBindings>
+					<ItemsControl.ItemTemplate>
+						<DataTemplate>
+							<TextBlock Text="{Binding}" />
+						</DataTemplate>
+					</ItemsControl.ItemTemplate>
+				</ListBox>
+				<TextBox HorizontalAlignment="Stretch" Text="{Binding InputExtension.Value, UpdateSourceTrigger=PropertyChanged}">
+					<TextBox.InputBindings>
+						<KeyBinding Key="Return" Command="{Binding AddExtensionCommand}" />
+					</TextBox.InputBindings>
+				</TextBox>
+			</StackPanel>
 		</StackPanel>
-	</Grid>
+	</ScrollViewer>
 </UserControl>
