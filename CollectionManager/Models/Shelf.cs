@@ -40,20 +40,25 @@ namespace CollectionManager.Models {
 		}
 
 		public void Load() {
-			var rows = this._database.ItemSets.ToArray();
-			this.ItemSetList.Clear();
-			this.ItemSetList.AddRange(this._settings.ScanDirectories.SelectMany(Directory.EnumerateDirectories).Select(x => {
-				var itemSet = new ItemSet(x, this._database);
-				itemSet.Title.Value = Path.GetFileName(x);
-				var row = rows.FirstOrDefault(r => r.DirectoryPath == x);
-				if (row == null) {
-					itemSet.Create();
-				} else {
-					itemSet.LoadDatabase(row);
-				}
+			DataBase.Tables.ItemSet[] rows;
+			lock (this._database) {
+				rows = this._database.ItemSets.ToArray();
+			}
 
-				return itemSet;
-			}));
+			this.ItemSetList.Clear();
+			this.ItemSetList.AddRange(this._settings.ScanDirectories.SelectMany(Directory.EnumerateDirectories)
+				.Select(x => {
+					var itemSet = new ItemSet(x, this._database);
+					itemSet.Title.Value = Path.GetFileName(x);
+					var row = rows.FirstOrDefault(r => r.DirectoryPath == x);
+					if (row == null) {
+						itemSet.Create();
+					} else {
+						itemSet.LoadDatabase(row);
+					}
+
+					return itemSet;
+				}));
 		}
 	}
 

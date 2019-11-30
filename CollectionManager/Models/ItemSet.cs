@@ -76,6 +76,7 @@ namespace CollectionManager.Models {
 				.Merge(this.Title.ToUnit())
 				.Merge(this.Authors.ToUnit())
 				.Where(_ => this._itemSetId != default)
+				.Throttle(TimeSpan.FromSeconds(1))
 				.Subscribe(_ => this.Update())
 				.AddTo(this.CompositeDisposable);
 
@@ -114,8 +115,11 @@ namespace CollectionManager.Models {
 				DirectoryPath = this.DirectoryPath,
 				OrdinalRegex = this.OrdinalRegex.Value
 			};
-			this._database.ItemSets.Add(row);
-			this._database.SaveChanges();
+			lock (this._database) {
+				this._database.ItemSets.Add(row);
+				this._database.SaveChanges();
+			}
+
 			this._itemSetId = row.ItemSetId;
 		}
 
@@ -156,14 +160,17 @@ namespace CollectionManager.Models {
 		/// データベース情報最新化
 		/// </summary>
 		private void Update() {
-			var row = this._database.ItemSets.Include(x => x.Authors).First(x => x.ItemSetId == this._itemSetId);
-			this._database.ItemSetAuthors.RemoveRange(row.Authors);
-			row.Authors = this.Authors.Value?.Select(x => new ItemSetAuthor { Name = x }).ToArray() ?? Array.Empty<ItemSetAuthor>();
-			row.Note = this.Note.Value;
-			row.Min = this.Min.Value;
-			row.Max = this.Max.Value;
-			row.OrdinalRegex = this.OrdinalRegex.Value;
-			this._database.SaveChanges();
+			lock (this._database) {
+				var row = this._database.ItemSets.Include(x => x.Authors).First(x => x.ItemSetId == this._itemSetId);
+				this._database.ItemSetAuthors.RemoveRange(row.Authors);
+				row.Authors = this.Authors.Value?.Select(x => new ItemSetAuthor { Name = x }).ToArray() ??
+							  Array.Empty<ItemSetAuthor>();
+				row.Note = this.Note.Value;
+				row.Min = this.Min.Value;
+				row.Max = this.Max.Value;
+				row.OrdinalRegex = this.OrdinalRegex.Value;
+				this._database.SaveChanges();
+			}
 		}
 	}
 }
