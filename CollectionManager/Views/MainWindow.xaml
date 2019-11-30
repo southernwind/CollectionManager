@@ -25,68 +25,12 @@
 				<ColumnDefinition Width="5" />
 				<ColumnDefinition Width="*" />
 			</Grid.ColumnDefinitions>
-			<ListView
-				Grid.Column="0"
-				ItemsSource="{Binding ItemSetList}"
-				SelectedItem="{Binding CurrentItemSet.Value}">
-				<ItemsControl.ItemTemplate>
-					<DataTemplate>
-						<TextBlock Text="{Binding Title.Value}" />
-					</DataTemplate>
-				</ItemsControl.ItemTemplate>
-			</ListView>
+			<local:ItemSetList Grid.Column="0" />
 			<GridSplitter
 				Grid.Column="1"
 				Width="5"
 				HorizontalAlignment="Stretch" />
-			<Grid Grid.Column="2" DataContext="{Binding CurrentItemSet.Value}">
-				<Grid.RowDefinitions>
-					<RowDefinition Height="Auto" />
-					<RowDefinition Height="Auto" />
-					<RowDefinition Height="*" />
-				</Grid.RowDefinitions>
-				<StackPanel Grid.Row="0">
-					<TextBlock FontSize="18" Text="{Binding Title.Value}" />
-					<DockPanel>
-						<StackPanel DockPanel.Dock="Left">
-							<TextBlock Text="正規表現" />
-							<TextBox Width="200" Text="{Binding OrdinalRegex.Value}" />
-						</StackPanel>
-						<Button
-							Command="{Binding OpenDirectoryCommand}"
-							Content="ディレクトリを開く"
-							DockPanel.Dock="Right" />
-						<StackPanel DockPanel.Dock="Right">
-							<TextBlock>
-								<Run Text="最小" />
-								<Run Text="{Binding Min.Value, Mode=OneWay}" />
-							</TextBlock>
-							<TextBlock>
-								<Run Text="最大" />
-								<Run Text="{Binding Max.Value, Mode=OneWay}" />
-							</TextBlock>
-						</StackPanel>
-						<Grid />
-					</DockPanel>
-					<ItemsControl ItemsSource="{Binding Authors.Value}">
-						<ItemsControl.ItemsPanel>
-							<ItemsPanelTemplate>
-								<VirtualizingStackPanel Orientation="Horizontal" />
-							</ItemsPanelTemplate>
-						</ItemsControl.ItemsPanel>
-					</ItemsControl>
-				</StackPanel>
-				<ItemsControl Grid.Row="2" ItemsSource="{Binding ItemList}">
-					<ItemsControl.ItemTemplate>
-						<DataTemplate>
-							<StackPanel Orientation="Horizontal">
-								<TextBlock Margin="0,0,15,0" Text="{Binding Ordinal.Value.Number}" />
-								<TextBlock Text="{Binding FilePath.Value}" />
-							</StackPanel>
-						</DataTemplate>
-					</ItemsControl.ItemTemplate>
-				</ItemsControl>
-			</Grid>
+			<local:ItemSetView Grid.Column="2" DataContext="{Binding CurrentItemSet.Value}" />
 		</Grid>
 	</DockPanel>
 </Window>
