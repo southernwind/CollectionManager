@@ -1,9 +1,12 @@
 
+using System.Collections.ObjectModel;
+using System.IO;
+using System.Linq;
+
 using CollectionManager.Composition.Base;
 using CollectionManager.Composition.Settings;
 
 using Reactive.Bindings;
-using Reactive.Bindings.Extensions;
 
 namespace CollectionManager.Models {
 	internal class Shelf : ModelBase {
@@ -22,12 +25,13 @@ namespace CollectionManager.Models {
 		}
 
 		public void Load() {
-			var itemset = new ItemSet().AddTo(this.CompositeDisposable);
-			itemset.Authors.Value = new[] { "ADA" };
-			itemset.DirectoryPath.Value = @"C:\test";
-			itemset.Title.Value = "Aqua Journal";
-
-			this.ItemSetList.Add(itemset);
+			this.ItemSetList.Clear();
+			this.ItemSetList.AddRange(this._settings.ScanDirectories.SelectMany(Directory.EnumerateDirectories).Select(x => {
+				var itemSet = new ItemSet();
+				itemSet.Title.Value = Path.GetFileName(x);
+				itemSet.DirectoryPath.Value = x;
+				return itemSet;
+			}));
 		}
 	}
 }
