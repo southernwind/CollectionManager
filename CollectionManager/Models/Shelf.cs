@@ -7,6 +7,8 @@ using Reactive.Bindings.Extensions;
 
 namespace CollectionManager.Models {
 	internal class Shelf : ModelBase {
+		private readonly ISettings _settings;
+
 		public ReactiveCollection<ItemSet> ItemSetList {
 			get;
 		} = new ReactiveCollection<ItemSet>();
@@ -16,6 +18,7 @@ namespace CollectionManager.Models {
 		} = new ReactivePropertySlim<ItemSet>();
 
 		public Shelf(ISettings settings) {
+			this._settings = settings;
 		}
 
 		public void Load() {
