@@ -21,7 +21,7 @@
 			<DockPanel>
 				<StackPanel DockPanel.Dock="Left">
 					<TextBlock Text="正規表現" />
-					<TextBox Width="200" Text="{Binding OrdinalRegex.Value}" />
+					<TextBox Width="200" Text="{Binding OrdinalRegex.Value, UpdateSourceTrigger=PropertyChanged}" />
 				</StackPanel>
 				<Button
 					Command="{Binding OpenDirectoryCommand}"

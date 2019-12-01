@@ -59,15 +59,7 @@ namespace CollectionManager.Models {
 			this.DirectoryPath = directoryPath;
 			this._database = database;
 
-			this.ItemList.CollectionChangedAsObservable().Subscribe(_ => {
-				if (!this.ItemList.Any()) {
-					this.Min.Value = null;
-					this.Max.Value = null;
-					return;
-				}
-				this.Min.Value = this.ItemList.Select(x => x.Ordinal.Value?.Number).Min();
-				this.Max.Value = this.ItemList.Select(x => x.Ordinal.Value?.Number).Max();
-			}).AddTo(this.CompositeDisposable);
+			this.ItemList.CollectionChangedAsObservable().Subscribe(_ => this.CalculateMinMax()).AddTo(this.CompositeDisposable);
 
 			this.Min.ToUnit()
 				.Merge(this.Max.ToUnit())
@@ -96,6 +88,8 @@ namespace CollectionManager.Models {
 						item.Ordinal.Value = new Ordinal { Number = int.Parse(match.Groups["number"].Value) };
 					}
 				}
+
+				this.CalculateMinMax();
 			});
 		}
 
@@ -171,6 +165,16 @@ namespace CollectionManager.Models {
 				row.OrdinalRegex = this.OrdinalRegex.Value;
 				this._database.SaveChanges();
 			}
+		}
+
+		private void CalculateMinMax() {
+			if (!this.ItemList.Any()) {
+				this.Min.Value = null;
+				this.Max.Value = null;
+				return;
+			}
+			this.Min.Value = this.ItemList.Select(x => x.Ordinal.Value?.Number).Min();
+			this.Max.Value = this.ItemList.Select(x => x.Ordinal.Value?.Number).Max();
 		}
 	}
 }
