@@ -20,11 +20,6 @@
 		</ItemsControl.ItemTemplate>
 		<ListView.View>
 			<GridView cap:GridViewColumns.AlternateKeyMember="AlternateKey" cap:GridViewColumns.ColumnsSource="{Binding Columns}">
-				<GridView.ColumnHeaderContextMenu>
-					<ContextMenu>
-						<MenuItem Header="表示列の設定" />
-					</ContextMenu>
-				</GridView.ColumnHeaderContextMenu>
 				<cap:GridViewColumns.GridViewColumnTemplates>
 					<cap:AlternateGridViewColumnCollection>
 						<cap:AlternateGridViewColumn
@@ -38,7 +33,7 @@
 							</GridViewColumn.CellTemplate>
 						</cap:AlternateGridViewColumn>
 						<cap:AlternateGridViewColumn
-							Width="200"
+							Width="50"
 							AlternateKey="{x:Static enum:AvailableColumns.Min}"
 							Header="{Binding AlternateKey, RelativeSource={RelativeSource Self}, Converter={StaticResource AvailableColumnsToStringConverter}}">
 							<GridViewColumn.CellTemplate>
@@ -48,7 +43,7 @@
 							</GridViewColumn.CellTemplate>
 						</cap:AlternateGridViewColumn>
 						<cap:AlternateGridViewColumn
-							Width="200"
+							Width="50"
 							AlternateKey="{x:Static enum:AvailableColumns.Max}"
 							Header="{Binding AlternateKey, RelativeSource={RelativeSource Self}, Converter={StaticResource AvailableColumnsToStringConverter}}">
 							<GridViewColumn.CellTemplate>
@@ -68,7 +63,7 @@
 							</GridViewColumn.CellTemplate>
 						</cap:AlternateGridViewColumn>
 						<cap:AlternateGridViewColumn
-							Width="200"
+							Width="90"
 							AlternateKey="{x:Static enum:AvailableColumns.NextReleaseDate}"
 							Header="{Binding AlternateKey, RelativeSource={RelativeSource Self}, Converter={StaticResource AvailableColumnsToStringConverter}}">
 							<GridViewColumn.CellTemplate>
@@ -78,7 +73,7 @@
 							</GridViewColumn.CellTemplate>
 						</cap:AlternateGridViewColumn>
 						<cap:AlternateGridViewColumn
-							Width="200"
+							Width="30"
 							AlternateKey="{x:Static enum:AvailableColumns.Completed}"
 							Header="{Binding AlternateKey, RelativeSource={RelativeSource Self}, Converter={StaticResource AvailableColumnsToStringConverter}}">
 							<GridViewColumn.CellTemplate>
