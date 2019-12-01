@@ -23,6 +23,20 @@
 					<TextBlock Text="正規表現" />
 					<TextBox Width="200" Text="{Binding OrdinalRegex.Value, UpdateSourceTrigger=PropertyChanged}" />
 				</StackPanel>
+				<StackPanel DockPanel.Dock="Left">
+					<DockPanel>
+						<TextBlock DockPanel.Dock="Left" Text="次回リリース日" />
+						<CheckBox
+							Content="済"
+							DockPanel.Dock="Right"
+							IsChecked="{Binding Completed.Value}" />
+						<Grid />
+					</DockPanel>
+					<DatePicker
+						Width="200"
+						IsEnabled="{Binding Completed.Value, Converter={StaticResource BoolReverseConverter}}"
+						SelectedDate="{Binding NextReleaseDate.Value}" />
+				</StackPanel>
 				<Button
 					Command="{Binding OpenDirectoryCommand}"
 					Content="ディレクトリを開く"

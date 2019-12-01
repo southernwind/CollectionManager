@@ -59,6 +59,14 @@ namespace CollectionManager.Models {
 			get;
 		} = new ReactivePropertySlim<double?>();
 
+		public IReactiveProperty<bool> Completed {
+			get;
+		} = new ReactivePropertySlim<bool>();
+
+		public IReactiveProperty<DateTime?> NextReleaseDate {
+			get;
+		} = new ReactivePropertySlim<DateTime?>();
+
 		public ItemSet(string directoryPath, CollectionManagerDbContext database, ISettings settings) {
 			this.DirectoryPath = directoryPath;
 			this._database = database;
@@ -72,6 +80,8 @@ namespace CollectionManager.Models {
 				.Merge(this.Note.ToUnit())
 				.Merge(this.Title.ToUnit())
 				.Merge(this.Authors.ToUnit())
+				.Merge(this.Completed.ToUnit())
+				.Merge(this.NextReleaseDate.ToUnit())
 				.Where(_ => this._itemSetId != default)
 				.Throttle(TimeSpan.FromSeconds(1))
 				.Subscribe(_ => this.Update())
@@ -128,6 +138,8 @@ namespace CollectionManager.Models {
 			this.Min.Value = row.Min;
 			this.Max.Value = row.Max;
 			this.OrdinalRegex.Value = row.OrdinalRegex;
+			this.Completed.Value = row.Completed;
+			this.NextReleaseDate.Value = row.NextReleaseDate;
 
 			this._itemSetId = row.ItemSetId;
 		}
@@ -170,6 +182,8 @@ namespace CollectionManager.Models {
 				row.Min = this.Min.Value;
 				row.Max = this.Max.Value;
 				row.OrdinalRegex = this.OrdinalRegex.Value;
+				row.Completed = this.Completed.Value;
+				row.NextReleaseDate = this.NextReleaseDate.Value;
 				this._database.SaveChanges();
 			}
 		}

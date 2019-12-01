@@ -67,6 +67,29 @@
 								</DataTemplate>
 							</GridViewColumn.CellTemplate>
 						</cap:AlternateGridViewColumn>
+						<cap:AlternateGridViewColumn
+							Width="200"
+							AlternateKey="{x:Static enum:AvailableColumns.NextReleaseDate}"
+							Header="{Binding AlternateKey, RelativeSource={RelativeSource Self}, Converter={StaticResource AvailableColumnsToStringConverter}}">
+							<GridViewColumn.CellTemplate>
+								<DataTemplate>
+									<TextBlock Text="{Binding NextReleaseDate.Value, StringFormat={}yyyy/MM/dd}" />
+								</DataTemplate>
+							</GridViewColumn.CellTemplate>
+						</cap:AlternateGridViewColumn>
+						<cap:AlternateGridViewColumn
+							Width="200"
+							AlternateKey="{x:Static enum:AvailableColumns.Completed}"
+							Header="{Binding AlternateKey, RelativeSource={RelativeSource Self}, Converter={StaticResource AvailableColumnsToStringConverter}}">
+							<GridViewColumn.CellTemplate>
+								<DataTemplate>
+									<CheckBox
+										IsChecked="{Binding Completed.Value}"
+										IsHitTestVisible="False"
+										IsTabStop="False" />
+								</DataTemplate>
+							</GridViewColumn.CellTemplate>
+						</cap:AlternateGridViewColumn>
 					</cap:AlternateGridViewColumnCollection>
 				</cap:GridViewColumns.GridViewColumnTemplates>
 			</GridView>

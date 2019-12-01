@@ -35,7 +35,7 @@ namespace CollectionManager.Models {
 			this._database = database;
 
 			var cols = new ReactiveCollection<Col>();
-			cols.AddRange(new[] { new Col(AvailableColumns.Title), new Col(AvailableColumns.Max) });
+			cols.AddRange(new[] { new Col(AvailableColumns.Title), new Col(AvailableColumns.Max), new Col(AvailableColumns.NextReleaseDate) });
 			this.Columns = cols.ToReadOnlyReactiveCollection();
 		}
 

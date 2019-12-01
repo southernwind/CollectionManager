@@ -1,7 +1,9 @@
 <ResourceDictionary
 	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:converters="clr-namespace:SandBeige.MediaBox.Controls.Converters"
 	xmlns:enums="clr-namespace:CollectionManager.Composition.Enums;assembly=CollectionManager.Composition">
 	<enums:AvailableColumnsToStringConverter x:Key="AvailableColumnsToStringConverter" />
 	<BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+	<converters:BoolReverseConverter x:Key="BoolReverseConverter" />
 </ResourceDictionary>

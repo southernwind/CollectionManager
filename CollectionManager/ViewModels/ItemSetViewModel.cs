@@ -1,4 +1,6 @@
 
+using System;
+
 using CollectionManager.Composition.Base;
 using CollectionManager.Models;
 
@@ -36,6 +38,14 @@ namespace CollectionManager.ViewModels {
 			get;
 		}
 
+		public IReactiveProperty<bool> Completed {
+			get;
+		}
+
+		public IReactiveProperty<DateTime?> NextReleaseDate {
+			get;
+		}
+
 		public IReadOnlyReactiveProperty<double?> Min {
 			get;
 		}
@@ -43,6 +53,7 @@ namespace CollectionManager.ViewModels {
 		public IReadOnlyReactiveProperty<double?> Max {
 			get;
 		}
+
 
 		public ReactiveCommand OpenDirectoryCommand {
 			get;
@@ -62,7 +73,8 @@ namespace CollectionManager.ViewModels {
 			this.OrdinalRegex = this.Model.OrdinalRegex.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
 			this.Min = this.Model.Min.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
 			this.Max = this.Model.Max.ToReadOnlyReactivePropertySlim().AddTo(this.CompositeDisposable);
-
+			this.Completed = this.Model.Completed.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
+			this.NextReleaseDate = this.Model.NextReleaseDate.ToReactivePropertyAsSynchronized(x => x.Value);
 			this.OpenDirectoryCommand.Subscribe(this.Model.OpenDirectory).AddTo(this.CompositeDisposable);
 			this.LoadActualFilesCommand.Subscribe(this.Model.LoadActualFiles).AddTo(this.CompositeDisposable);
 		}

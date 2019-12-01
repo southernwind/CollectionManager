@@ -28,6 +28,14 @@ namespace CollectionManager.Composition.Enums {
 		/// メモ
 		/// </summary>
 		Note,
+		/// <summary>
+		/// 次回リリース日
+		/// </summary>
+		NextReleaseDate,
+		/// <summary>
+		/// 済
+		/// </summary>
+		Completed
 	}
 
 	/// <summary>
@@ -52,7 +60,9 @@ namespace CollectionManager.Composition.Enums {
 				{ AvailableColumns.Min, "最小値" },
 				{ AvailableColumns.Max, "最大値" },
 				{ AvailableColumns.Authors, "作者" },
-				{ AvailableColumns.Note, "メモ" }
+				{ AvailableColumns.Note, "メモ" },
+				{ AvailableColumns.NextReleaseDate, "次回リリース日" },
+				{ AvailableColumns.Completed, "済" }
 			};
 
 			if (dict.TryGetValue(ac, out var val)) {

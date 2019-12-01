@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace CollectionManager.DataBase.Tables {
@@ -34,6 +35,16 @@ namespace CollectionManager.DataBase.Tables {
 		}
 
 		public string OrdinalRegex {
+			get;
+			set;
+		}
+
+		public bool Completed {
+			get;
+			set;
+		}
+
+		public DateTime? NextReleaseDate {
 			get;
 			set;
 		}
