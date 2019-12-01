@@ -1,8 +1,10 @@
 using System;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive.Linq;
 
 using CollectionManager.Composition.Base;
+using CollectionManager.Composition.Enums;
 using CollectionManager.Models;
 
 using Prism.Services.Dialogs;
@@ -28,8 +30,17 @@ namespace CollectionManager.ViewModels {
 			get;
 		}
 
+		public ReactiveCollection<AvailableColumns> SortConditions {
+			get;
+		} = new ReactiveCollection<AvailableColumns>();
+
+		public ReactiveCommand<AvailableColumns> ChangeSortConditionCommand {
+			get;
+		} = new ReactiveCommand<AvailableColumns>();
+
 		public MainWindowViewModel(IDialogService dialogService, Shelf shelf) {
-			this.ItemSetList = shelf.ItemSetList.ToReadOnlyReactiveCollection(x => new ItemSetViewModel(x)).AddTo(this.CompositeDisposable);
+			this.ItemSetList = shelf.SortedItemSetList.ToReadOnlyReactiveCollection(x => new ItemSetViewModel(x)).AddTo(this.CompositeDisposable);
+			this.SortConditions.AddRange(Enum.GetValues(typeof(AvailableColumns)).Cast<AvailableColumns>());
 			this.CurrentItemSet = shelf.CurrentItemSet.ToReactivePropertyAsSynchronized(
 				x => x.Value,
 				x => x == null ? null : new ItemSetViewModel(x),
@@ -44,6 +55,8 @@ namespace CollectionManager.ViewModels {
 				x.LoadActualFilesCommand.Execute();
 			}).AddTo(this.CompositeDisposable);
 			shelf.Load();
+
+			this.ChangeSortConditionCommand.Subscribe(shelf.ChangeSortCondition);
 		}
 	}
 }

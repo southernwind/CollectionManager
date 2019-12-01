@@ -1,4 +1,6 @@
 
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
@@ -16,6 +18,10 @@ namespace CollectionManager.Models {
 		private readonly CollectionManagerDbContext _database;
 
 		public ReactiveCollection<ItemSet> ItemSetList {
+			get;
+		} = new ReactiveCollection<ItemSet>();
+
+		public ReactiveCollection<ItemSet> SortedItemSetList {
 			get;
 		} = new ReactiveCollection<ItemSet>();
 
@@ -59,6 +65,21 @@ namespace CollectionManager.Models {
 
 					return itemSet;
 				}));
+			this.ChangeSortCondition(AvailableColumns.Title);
+		}
+
+		public void ChangeSortCondition(AvailableColumns column) {
+			var d = new Dictionary<AvailableColumns, Func<ItemSet, object>> {
+				{AvailableColumns.Title, x => x.Title.Value},
+				{AvailableColumns.Min, x => x.Min.Value},
+				{AvailableColumns.Max, x => x.Max.Value},
+				{AvailableColumns.Authors, x => x.Authors.Value},
+				{AvailableColumns.Note, x => x.Note.Value},
+				{AvailableColumns.NextReleaseDate, x => x.NextReleaseDate.Value},
+				{AvailableColumns.Completed, x => x.Completed.Value}
+			};
+			this.SortedItemSetList.Clear();
+			this.SortedItemSetList.AddRange(this.ItemSetList.OrderBy(d[column]));
 		}
 	}
 
