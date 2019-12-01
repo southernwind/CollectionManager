@@ -143,7 +143,7 @@ namespace CollectionManager.Models {
 			}
 			foreach (var file in Directory.EnumerateFiles(this.DirectoryPath).Where(x => this._settings.TargetExtensions.Select(x => x.ExtensionText.Value).Contains(Path.GetExtension(x)))) {
 				var match = regex?.Match(Path.GetFileName(file));
-				var item = new Item();
+				var item = new Item(this._settings);
 				item.FilePath.Value = file;
 				if (match?.Success ?? false) {
 					item.Ordinal.Value = new Ordinal { Number = int.Parse(match.Groups["number"].Value) };

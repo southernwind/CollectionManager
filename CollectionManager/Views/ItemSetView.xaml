@@ -51,9 +51,18 @@
 			Grid.Row="2"
 			Grid.IsSharedSizeScope="True"
 			ItemsSource="{Binding ItemList}">
+			<ItemsControl.ItemContainerStyle>
+				<Style TargetType="ListViewItem">
+					<Setter Property="HorizontalContentAlignment" Value="Stretch" />
+					<Setter Property="VerticalContentAlignment" Value="Stretch" />
+				</Style>
+			</ItemsControl.ItemContainerStyle>
 			<ItemsControl.ItemTemplate>
 				<DataTemplate>
 					<Grid>
+						<Grid.InputBindings>
+							<MouseBinding Command="{Binding LaunchCommand}" MouseAction="LeftDoubleClick" />
+						</Grid.InputBindings>
 						<Grid.ColumnDefinitions>
 							<ColumnDefinition Width="Auto" SharedSizeGroup="col1" />
 							<ColumnDefinition Width="*" />
@@ -66,6 +75,7 @@
 							Grid.Column="1"
 							Text="{Binding FileName.Value}"
 							ToolTip="{Binding FilePath.Value}" />
+						<TextBlock Grid.Column="0" Grid.ColumnSpan="2" />
 					</Grid>
 				</DataTemplate>
 			</ItemsControl.ItemTemplate>
