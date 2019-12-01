@@ -3,6 +3,7 @@ using System.Reactive.Linq;
 using System.Windows.Forms;
 
 using CollectionManager.Composition.Base;
+using CollectionManager.Composition.Objects;
 using CollectionManager.Composition.Settings;
 
 using Prism.Services.Dialogs;
@@ -32,9 +33,23 @@ namespace CollectionManager.ViewModels {
 		/// <summary>
 		/// 対象拡張子
 		/// </summary>
-		public ReadOnlyReactiveCollection<string> TargetExtensions {
+		public ReadOnlyReactiveCollection<Extension> TargetExtensions {
 			get;
 		}
+
+		/// <summary>
+		/// 対象拡張子
+		/// </summary>
+		public ReadOnlyReactiveCollection<ExternalTool> ExternalTools {
+			get;
+		}
+
+		/// <summary>
+		/// 対象拡張子
+		/// </summary>
+		public IReactiveProperty<ExternalTool> SelectedExternalTool {
+			get;
+		} = new ReactivePropertySlim<ExternalTool>();
 
 		/// <summary>
 		/// 対象拡張子追加
@@ -46,9 +61,9 @@ namespace CollectionManager.ViewModels {
 		/// <summary>
 		/// 対象拡張子削除
 		/// </summary>
-		public ReactiveCommand<string> RemoveExtensionCommand {
+		public ReactiveCommand<Extension> RemoveExtensionCommand {
 			get;
-		} = new ReactiveCommand<string>();
+		} = new ReactiveCommand<Extension>();
 
 		/// <summary>
 		/// スキャン設定追加
@@ -64,9 +79,25 @@ namespace CollectionManager.ViewModels {
 			get;
 		} = new ReactiveCommand();
 
-		public SettingsWindowViewModel(ISettings settings) {
+		/// <summary>
+		/// 外部ツール追加
+		/// </summary>
+		public ReactiveCommand AddExternalToolCommand {
+			get;
+		} = new ReactiveCommand();
+
+		/// <summary>
+		/// 外部ツール削除
+		/// </summary>
+		public ReactiveCommand RemoveExternalToolCommand {
+			get;
+		} = new ReactiveCommand();
+
+		public SettingsWindowViewModel(ISettings settings, IDialogService dialogService) {
 			this.ScanDirectories = settings.ScanDirectories.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
 			this.TargetExtensions = settings.TargetExtensions.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
+			this.ExternalTools = settings.ExternalTools.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
+
 			this.AddScanDirectoryCommand.Subscribe(() => {
 				var fbd = new FolderBrowserDialog();
 				if (fbd.ShowDialog() == DialogResult.OK) {
@@ -79,11 +110,17 @@ namespace CollectionManager.ViewModels {
 
 			this.AddExtensionCommand = this.InputExtension.Select(x => x?.StartsWith(".") ?? false).ToReactiveCommand()
 				.WithSubscribe(() => {
-					settings.TargetExtensions.Add(this.InputExtension.Value);
+					settings.TargetExtensions.Add(new Extension(this.InputExtension.Value));
 					this.InputExtension.Value = null;
 				}).AddTo(this.CompositeDisposable);
 
 			this.RemoveExtensionCommand.Subscribe(x => settings.TargetExtensions.Remove(x)).AddTo(this.CompositeDisposable);
+
+			this.AddExternalToolCommand.Subscribe(() => {
+				settings.ExternalTools.Add(new ExternalTool());
+			});
+
+			this.RemoveExternalToolCommand.Subscribe(() => settings.ExternalTools.Remove(this.SelectedExternalTool.Value));
 		}
 
 		public bool CanCloseDialog() {

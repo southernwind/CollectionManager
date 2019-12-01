@@ -1,3 +1,4 @@
+using CollectionManager.Composition.Objects;
 using CollectionManager.Composition.Settings.Objects;
 
 namespace CollectionManager.Composition.Settings {
@@ -10,9 +11,16 @@ namespace CollectionManager.Composition.Settings {
 		}
 
 		/// <summary>
-		/// スキャン設定
+		/// 対象拡張子
 		/// </summary>
-		SettingsCollection<string> TargetExtensions {
+		SettingsCollection<Extension> TargetExtensions {
+			get;
+		}
+
+		/// <summary>
+		/// 外部ツール
+		/// </summary>
+		SettingsCollection<ExternalTool> ExternalTools {
 			get;
 		}
 

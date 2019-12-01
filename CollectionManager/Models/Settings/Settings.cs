@@ -4,6 +4,7 @@ using System.IO;
 using System.Xaml;
 using System.Xml;
 
+using CollectionManager.Composition.Objects;
 using CollectionManager.Composition.Settings;
 using CollectionManager.Composition.Settings.Objects;
 
@@ -20,9 +21,16 @@ namespace CollectionManager.Models.Settings {
 		/// <summary>
 		/// 対象拡張子
 		/// </summary>
-		public SettingsCollection<string> TargetExtensions {
+		public SettingsCollection<Extension> TargetExtensions {
 			get;
-		} = new SettingsCollection<string>(".pdf");
+		} = new SettingsCollection<Extension>(new Extension(".pdf"));
+
+		/// <summary>
+		/// 外部ツール
+		/// </summary>
+		public SettingsCollection<ExternalTool> ExternalTools {
+			get;
+		} = new SettingsCollection<ExternalTool>(Array.Empty<ExternalTool>());
 
 		[Obsolete("for serialize")]
 		public Settings() {
