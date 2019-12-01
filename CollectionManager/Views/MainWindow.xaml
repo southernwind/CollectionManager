@@ -8,11 +8,12 @@
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:prism="http://prismlibrary.com/"
 	xmlns:vm="clr-namespace:CollectionManager.ViewModels"
-	Title="MainWindow"
+	Title="CollectionManager"
 	Width="800"
 	Height="450"
 	d:DataContext="{d:DesignInstance vm:MainWindowViewModel}"
 	prism:ViewModelLocator.AutoWireViewModel="True"
+	Icon="/Assets/owl.ico"
 	mc:Ignorable="d">
 	<DockPanel>
 		<Menu DockPanel.Dock="Top">

@@ -1,10 +1,11 @@
-<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <RootNamespace>CollectionManager</RootNamespace>
     <AssemblyName>CollectionManager</AssemblyName>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>Assets\owl.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\CollectionManager.Controls\CollectionManager.Controls.csproj" />
@@ -13,5 +14,8 @@
   <ItemGroup>
     <PackageReference Include="ReactiveProperty" />
     <PackageReference Include="Prism.Unity" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\owl.ico" />
   </ItemGroup>
 </Project>
