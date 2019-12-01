@@ -52,7 +52,7 @@
 				<DataTemplate>
 					<StackPanel Orientation="Horizontal">
 						<TextBlock Margin="0,0,15,0" Text="{Binding Ordinal.Value.Number}" />
-						<TextBlock Text="{Binding FilePath.Value}" />
+						<TextBlock Text="{Binding FileName.Value}" ToolTip="{Binding FilePath.Value}" />
 					</StackPanel>
 				</DataTemplate>
 			</ItemsControl.ItemTemplate>
