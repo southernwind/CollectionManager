@@ -13,12 +13,6 @@ namespace CollectionManager.DataBase {
 			get;
 			set;
 		}
-
-		public DbSet<Item> Items {
-			get;
-			set;
-		}
-
 		public DbSet<ItemSetAuthor> ItemSetAuthors {
 			get;
 			set;
@@ -31,15 +25,9 @@ namespace CollectionManager.DataBase {
 		protected override void OnModelCreating(ModelBuilder modelBuilder) {
 			// Primary Keys
 			modelBuilder.Entity<ItemSet>().HasKey(x => x.ItemSetId);
-			modelBuilder.Entity<Item>().HasKey(x => new { x.ItemSetId, x.OrdinalNumber, x.OrdinalAlternative });
 			modelBuilder.Entity<ItemSetAuthor>().HasKey(x => new { x.ItemSetId, x.Name });
 
 			// Relation
-			modelBuilder.Entity<Item>()
-				.HasOne(x => x.ItemSet)
-				.WithMany(x => x.Items)
-				.OnDelete(DeleteBehavior.Cascade);
-
 			modelBuilder.Entity<ItemSetAuthor>()
 				.HasOne(x => x.ItemSet)
 				.WithMany(x => x.Authors)

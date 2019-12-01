@@ -37,10 +37,5 @@ namespace CollectionManager.DataBase.Tables {
 			get;
 			set;
 		}
-
-		public virtual ICollection<Item> Items {
-			get;
-			set;
-		}
 	}
 }
