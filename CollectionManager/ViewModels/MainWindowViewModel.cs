@@ -38,6 +38,10 @@ namespace CollectionManager.ViewModels {
 			get;
 		} = new ReactiveCommand<AvailableColumns>();
 
+		public ReactiveCommand ReloadCommand {
+			get;
+		} = new ReactiveCommand();
+
 		public MainWindowViewModel(IDialogService dialogService, Shelf shelf) {
 			this.ItemSetList = shelf.SortedItemSetList.ToReadOnlyReactiveCollection(x => new ItemSetViewModel(x)).AddTo(this.CompositeDisposable);
 			this.SortConditions.AddRange(Enum.GetValues(typeof(AvailableColumns)).Cast<AvailableColumns>());
@@ -57,6 +61,8 @@ namespace CollectionManager.ViewModels {
 			shelf.Load();
 
 			this.ChangeSortConditionCommand.Subscribe(shelf.ChangeSortCondition);
+
+			this.ReloadCommand.Subscribe(shelf.Load).AddTo(this.CompositeDisposable);
 		}
 	}
 }
