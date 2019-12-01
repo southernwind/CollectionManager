@@ -25,6 +25,8 @@ namespace CollectionManager.Models {
 		/// </summary>
 		private int _itemSetId;
 
+		private bool _fileLoadedFlag;
+
 		public string DirectoryPath {
 			get;
 		}
@@ -83,7 +85,7 @@ namespace CollectionManager.Models {
 					return "正規表現検証エラー";
 				}
 			});
-			this.OrdinalRegex.Where(x => !this.OrdinalRegex.HasErrors).Subscribe(x => {
+			this.OrdinalRegex.Where(x => !this.OrdinalRegex.HasErrors && this._fileLoadedFlag).Subscribe(x => {
 				var regex = new Regex(this.OrdinalRegex.Value);
 				foreach (var item in this.ItemList) {
 					var match = regex.Match(Path.GetFileName(item.FilePath.Value));
@@ -151,6 +153,8 @@ namespace CollectionManager.Models {
 
 				this.ItemList.Add(item);
 			}
+
+			this._fileLoadedFlag = true;
 		}
 
 		/// <summary>
