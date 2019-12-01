@@ -48,7 +48,7 @@ namespace CollectionManager.Models {
 			this.ItemSetList.Clear();
 			this.ItemSetList.AddRange(this._settings.ScanDirectories.SelectMany(Directory.EnumerateDirectories)
 				.Select(x => {
-					var itemSet = new ItemSet(x, this._database);
+					var itemSet = new ItemSet(x, this._database, this._settings);
 					itemSet.Title.Value = Path.GetFileName(x);
 					var row = rows.FirstOrDefault(r => r.DirectoryPath == x);
 					if (row == null) {

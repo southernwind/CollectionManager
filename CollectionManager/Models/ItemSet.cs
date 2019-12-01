@@ -6,6 +6,7 @@ using System.Reactive.Linq;
 using System.Text.RegularExpressions;
 
 using CollectionManager.Composition.Base;
+using CollectionManager.Composition.Settings;
 using CollectionManager.DataBase;
 using CollectionManager.DataBase.Tables;
 
@@ -17,6 +18,7 @@ using Reactive.Bindings.Extensions;
 namespace CollectionManager.Models {
 	internal class ItemSet : ModelBase {
 		private readonly CollectionManagerDbContext _database;
+		private readonly ISettings _settings;
 
 		/// <summary>
 		/// アイテムセットID
@@ -55,9 +57,10 @@ namespace CollectionManager.Models {
 			get;
 		} = new ReactivePropertySlim<double?>();
 
-		public ItemSet(string directoryPath, CollectionManagerDbContext database) {
+		public ItemSet(string directoryPath, CollectionManagerDbContext database, ISettings settings) {
 			this.DirectoryPath = directoryPath;
 			this._database = database;
+			this._settings = settings;
 
 			this.ItemList.CollectionChangedAsObservable().Subscribe(_ => this.CalculateMinMax()).AddTo(this.CompositeDisposable);
 
@@ -138,7 +141,7 @@ namespace CollectionManager.Models {
 			} catch {
 				Console.WriteLine("正規表現検証エラー");
 			}
-			foreach (var file in Directory.EnumerateFiles(this.DirectoryPath)) {
+			foreach (var file in Directory.EnumerateFiles(this.DirectoryPath).Where(x => this._settings.TargetExtensions.Select(x => x.ExtensionText.Value).Contains(Path.GetExtension(x)))) {
 				var match = regex?.Match(Path.GetFileName(file));
 				var item = new Item();
 				item.FilePath.Value = file;
