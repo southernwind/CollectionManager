@@ -39,6 +39,10 @@ namespace CollectionManager.Models {
 			get;
 		} = new ReactivePropertySlim<string>();
 
+		public IReactiveProperty<string> TitleYomi {
+			get;
+		} = new ReactivePropertySlim<string>();
+
 		public IReactiveProperty<string[]> Authors {
 			get;
 		} = new ReactivePropertySlim<string[]>();
@@ -82,6 +86,7 @@ namespace CollectionManager.Models {
 				.Merge(this.Authors.ToUnit())
 				.Merge(this.Completed.ToUnit())
 				.Merge(this.NextReleaseDate.ToUnit())
+				.Merge(this.TitleYomi.ToUnit())
 				.Where(_ => this._itemSetId != default)
 				.Throttle(TimeSpan.FromSeconds(1))
 				.Subscribe(_ => this.Update())
@@ -133,6 +138,7 @@ namespace CollectionManager.Models {
 		}
 
 		public void LoadDatabase(DataBase.Tables.ItemSet row) {
+			this.TitleYomi.Value = row.TitleYomi;
 			this.Authors.Value = row.Authors?.Select(x => x.Name).ToArray();
 			this.Note.Value = row.Note;
 			this.Min.Value = row.Min;
@@ -176,6 +182,7 @@ namespace CollectionManager.Models {
 			lock (this._database) {
 				var row = this._database.ItemSets.Include(x => x.Authors).First(x => x.ItemSetId == this._itemSetId);
 				this._database.ItemSetAuthors.RemoveRange(row.Authors);
+				row.TitleYomi = this.TitleYomi.Value;
 				row.Authors = this.Authors.Value?.Select(x => new ItemSetAuthor { Name = x }).ToArray() ??
 							  Array.Empty<ItemSetAuthor>();
 				row.Note = this.Note.Value;

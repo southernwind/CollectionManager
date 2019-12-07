@@ -14,6 +14,11 @@ namespace CollectionManager.DataBase.Tables {
 			set;
 		}
 
+		public string TitleYomi {
+			get;
+			set;
+		}
+
 		public ICollection<ItemSetAuthor> Authors {
 			get;
 			set;

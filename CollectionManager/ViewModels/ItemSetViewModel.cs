@@ -26,6 +26,10 @@ namespace CollectionManager.ViewModels {
 			get;
 		}
 
+		public IReactiveProperty<string> TitleYomi {
+			get;
+		}
+
 		public IReactiveProperty<string[]> Authors {
 			get;
 		}
@@ -68,6 +72,7 @@ namespace CollectionManager.ViewModels {
 			this.Model = model;
 			this.ItemList = this.Model.ItemList.ToReadOnlyReactiveCollection().AddTo(this.CompositeDisposable);
 			this.Title = this.Model.Title.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
+			this.TitleYomi = this.Model.TitleYomi.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
 			this.Authors = this.Model.Authors.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
 			this.Note = this.Model.Note.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
 			this.OrdinalRegex = this.Model.OrdinalRegex.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);

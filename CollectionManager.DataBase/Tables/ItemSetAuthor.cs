@@ -10,6 +10,11 @@ namespace CollectionManager.DataBase.Tables {
 			set;
 		}
 
+		public string NameYomi {
+			get;
+			set;
+		}
+
 		public virtual ItemSet ItemSet {
 			get;
 			set;
