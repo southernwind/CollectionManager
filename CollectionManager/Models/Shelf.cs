@@ -71,6 +71,7 @@ namespace CollectionManager.Models {
 		public void ChangeSortCondition(AvailableColumns column) {
 			var d = new Dictionary<AvailableColumns, Func<ItemSet, object>> {
 				{AvailableColumns.Title, x => x.Title.Value},
+				{AvailableColumns.TitleYomi, x => x.TitleYomi.Value},
 				{AvailableColumns.Min, x => x.Min.Value},
 				{AvailableColumns.Max, x => x.Max.Value},
 				{AvailableColumns.Authors, x => x.Authors.Value},

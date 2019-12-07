@@ -13,6 +13,10 @@ namespace CollectionManager.Composition.Enums {
 		/// </summary>
 		Title,
 		/// <summary>
+		/// タイトル読み
+		/// </summary>
+		TitleYomi,
+		/// <summary>
 		/// 最小値
 		/// </summary>
 		Min,
@@ -57,6 +61,7 @@ namespace CollectionManager.Composition.Enums {
 
 			var dict = new Dictionary<AvailableColumns, string> {
 				{ AvailableColumns.Title, "タイトル" },
+				{ AvailableColumns.TitleYomi, "タイトル読み" },
 				{ AvailableColumns.Min, "最小値" },
 				{ AvailableColumns.Max, "最大値" },
 				{ AvailableColumns.Authors, "作者" },
