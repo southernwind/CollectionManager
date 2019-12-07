@@ -12,82 +12,92 @@
 	d:DesignHeight="450"
 	d:DesignWidth="800"
 	mc:Ignorable="d">
-	<ListView ItemsSource="{Binding ItemSetList}" SelectedItem="{Binding CurrentItemSet.Value}">
-		<ItemsControl.ItemTemplate>
-			<DataTemplate>
-				<TextBlock Text="{Binding Title.Value}" />
-			</DataTemplate>
-		</ItemsControl.ItemTemplate>
-		<ListView.View>
-			<GridView cap:GridViewColumns.AlternateKeyMember="AlternateKey" cap:GridViewColumns.ColumnsSource="{Binding Columns}">
-				<cap:GridViewColumns.GridViewColumnTemplates>
-					<cap:AlternateGridViewColumnCollection>
-						<cap:AlternateGridViewColumn
-							Width="200"
-							AlternateKey="{x:Static enum:AvailableColumns.Title}"
-							Header="{Binding AlternateKey, RelativeSource={RelativeSource Self}, Converter={StaticResource AvailableColumnsToStringConverter}}">
-							<GridViewColumn.CellTemplate>
-								<DataTemplate>
-									<TextBlock Text="{Binding Title.Value}" />
-								</DataTemplate>
-							</GridViewColumn.CellTemplate>
-						</cap:AlternateGridViewColumn>
-						<cap:AlternateGridViewColumn
-							Width="50"
-							AlternateKey="{x:Static enum:AvailableColumns.Min}"
-							Header="{Binding AlternateKey, RelativeSource={RelativeSource Self}, Converter={StaticResource AvailableColumnsToStringConverter}}">
-							<GridViewColumn.CellTemplate>
-								<DataTemplate>
-									<TextBlock Text="{Binding Min.Value}" />
-								</DataTemplate>
-							</GridViewColumn.CellTemplate>
-						</cap:AlternateGridViewColumn>
-						<cap:AlternateGridViewColumn
-							Width="50"
-							AlternateKey="{x:Static enum:AvailableColumns.Max}"
-							Header="{Binding AlternateKey, RelativeSource={RelativeSource Self}, Converter={StaticResource AvailableColumnsToStringConverter}}">
-							<GridViewColumn.CellTemplate>
-								<DataTemplate>
-									<TextBlock Text="{Binding Max.Value}" />
-								</DataTemplate>
-							</GridViewColumn.CellTemplate>
-						</cap:AlternateGridViewColumn>
-						<cap:AlternateGridViewColumn
-							Width="200"
-							AlternateKey="{x:Static enum:AvailableColumns.Note}"
-							Header="{Binding AlternateKey, RelativeSource={RelativeSource Self}, Converter={StaticResource AvailableColumnsToStringConverter}}">
-							<GridViewColumn.CellTemplate>
-								<DataTemplate>
-									<TextBlock Text="{Binding Note.Value}" />
-								</DataTemplate>
-							</GridViewColumn.CellTemplate>
-						</cap:AlternateGridViewColumn>
-						<cap:AlternateGridViewColumn
-							Width="90"
-							AlternateKey="{x:Static enum:AvailableColumns.NextReleaseDate}"
-							Header="{Binding AlternateKey, RelativeSource={RelativeSource Self}, Converter={StaticResource AvailableColumnsToStringConverter}}">
-							<GridViewColumn.CellTemplate>
-								<DataTemplate>
-									<TextBlock Text="{Binding NextReleaseDate.Value, StringFormat={}yyyy/MM/dd}" />
-								</DataTemplate>
-							</GridViewColumn.CellTemplate>
-						</cap:AlternateGridViewColumn>
-						<cap:AlternateGridViewColumn
-							Width="30"
-							AlternateKey="{x:Static enum:AvailableColumns.Completed}"
-							Header="{Binding AlternateKey, RelativeSource={RelativeSource Self}, Converter={StaticResource AvailableColumnsToStringConverter}}">
-							<GridViewColumn.CellTemplate>
-								<DataTemplate>
-									<CheckBox
-										IsChecked="{Binding Completed.Value}"
-										IsHitTestVisible="False"
-										IsTabStop="False" />
-								</DataTemplate>
-							</GridViewColumn.CellTemplate>
-						</cap:AlternateGridViewColumn>
-					</cap:AlternateGridViewColumnCollection>
-				</cap:GridViewColumns.GridViewColumnTemplates>
-			</GridView>
-		</ListView.View>
-	</ListView>
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="*" />
+		</Grid.RowDefinitions>
+		<TextBox Grid.Row="0" Text="{Binding FilterWord.Value, UpdateSourceTrigger=PropertyChanged}" />
+		<ListView
+			Grid.Row="1"
+			ItemsSource="{Binding ItemSetList}"
+			SelectedItem="{Binding CurrentItemSet.Value}">
+			<ItemsControl.ItemTemplate>
+				<DataTemplate>
+					<TextBlock Text="{Binding Title.Value}" />
+				</DataTemplate>
+			</ItemsControl.ItemTemplate>
+			<ListView.View>
+				<GridView cap:GridViewColumns.AlternateKeyMember="AlternateKey" cap:GridViewColumns.ColumnsSource="{Binding Columns}">
+					<cap:GridViewColumns.GridViewColumnTemplates>
+						<cap:AlternateGridViewColumnCollection>
+							<cap:AlternateGridViewColumn
+								Width="200"
+								AlternateKey="{x:Static enum:AvailableColumns.Title}"
+								Header="{Binding AlternateKey, RelativeSource={RelativeSource Self}, Converter={StaticResource AvailableColumnsToStringConverter}}">
+								<GridViewColumn.CellTemplate>
+									<DataTemplate>
+										<TextBlock Text="{Binding Title.Value}" />
+									</DataTemplate>
+								</GridViewColumn.CellTemplate>
+							</cap:AlternateGridViewColumn>
+							<cap:AlternateGridViewColumn
+								Width="50"
+								AlternateKey="{x:Static enum:AvailableColumns.Min}"
+								Header="{Binding AlternateKey, RelativeSource={RelativeSource Self}, Converter={StaticResource AvailableColumnsToStringConverter}}">
+								<GridViewColumn.CellTemplate>
+									<DataTemplate>
+										<TextBlock Text="{Binding Min.Value}" />
+									</DataTemplate>
+								</GridViewColumn.CellTemplate>
+							</cap:AlternateGridViewColumn>
+							<cap:AlternateGridViewColumn
+								Width="50"
+								AlternateKey="{x:Static enum:AvailableColumns.Max}"
+								Header="{Binding AlternateKey, RelativeSource={RelativeSource Self}, Converter={StaticResource AvailableColumnsToStringConverter}}">
+								<GridViewColumn.CellTemplate>
+									<DataTemplate>
+										<TextBlock Text="{Binding Max.Value}" />
+									</DataTemplate>
+								</GridViewColumn.CellTemplate>
+							</cap:AlternateGridViewColumn>
+							<cap:AlternateGridViewColumn
+								Width="200"
+								AlternateKey="{x:Static enum:AvailableColumns.Note}"
+								Header="{Binding AlternateKey, RelativeSource={RelativeSource Self}, Converter={StaticResource AvailableColumnsToStringConverter}}">
+								<GridViewColumn.CellTemplate>
+									<DataTemplate>
+										<TextBlock Text="{Binding Note.Value}" />
+									</DataTemplate>
+								</GridViewColumn.CellTemplate>
+							</cap:AlternateGridViewColumn>
+							<cap:AlternateGridViewColumn
+								Width="90"
+								AlternateKey="{x:Static enum:AvailableColumns.NextReleaseDate}"
+								Header="{Binding AlternateKey, RelativeSource={RelativeSource Self}, Converter={StaticResource AvailableColumnsToStringConverter}}">
+								<GridViewColumn.CellTemplate>
+									<DataTemplate>
+										<TextBlock Text="{Binding NextReleaseDate.Value, StringFormat={}yyyy/MM/dd}" />
+									</DataTemplate>
+								</GridViewColumn.CellTemplate>
+							</cap:AlternateGridViewColumn>
+							<cap:AlternateGridViewColumn
+								Width="30"
+								AlternateKey="{x:Static enum:AvailableColumns.Completed}"
+								Header="{Binding AlternateKey, RelativeSource={RelativeSource Self}, Converter={StaticResource AvailableColumnsToStringConverter}}">
+								<GridViewColumn.CellTemplate>
+									<DataTemplate>
+										<CheckBox
+											IsChecked="{Binding Completed.Value}"
+											IsHitTestVisible="False"
+											IsTabStop="False" />
+									</DataTemplate>
+								</GridViewColumn.CellTemplate>
+							</cap:AlternateGridViewColumn>
+						</cap:AlternateGridViewColumnCollection>
+					</cap:GridViewColumns.GridViewColumnTemplates>
+				</GridView>
+			</ListView.View>
+		</ListView>
+	</Grid>
 </UserControl>

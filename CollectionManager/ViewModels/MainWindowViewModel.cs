@@ -30,6 +30,10 @@ namespace CollectionManager.ViewModels {
 			get;
 		}
 
+		public IReactiveProperty<string> FilterWord {
+			get;
+		}
+
 		public ReactiveCollection<AvailableColumns> SortConditions {
 			get;
 		} = new ReactiveCollection<AvailableColumns>();
@@ -45,6 +49,7 @@ namespace CollectionManager.ViewModels {
 		public MainWindowViewModel(IDialogService dialogService, Shelf shelf) {
 			this.ItemSetList = shelf.SortedItemSetList.ToReadOnlyReactiveCollection(x => new ItemSetViewModel(x)).AddTo(this.CompositeDisposable);
 			this.SortConditions.AddRange(Enum.GetValues(typeof(AvailableColumns)).Cast<AvailableColumns>());
+			this.FilterWord = shelf.FilterWord.ToReactivePropertyAsSynchronized(x => x.Value).AddTo(this.CompositeDisposable);
 			this.CurrentItemSet = shelf.CurrentItemSet.ToReactivePropertyAsSynchronized(
 				x => x.Value,
 				x => x == null ? null : new ItemSetViewModel(x),

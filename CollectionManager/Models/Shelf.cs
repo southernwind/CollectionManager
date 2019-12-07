@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Reactive.Linq;
 
 using CollectionManager.Composition.Base;
 using CollectionManager.Composition.Enums;
@@ -29,6 +30,14 @@ namespace CollectionManager.Models {
 			get;
 		} = new ReactivePropertySlim<ItemSet>();
 
+		public IReactiveProperty<string> FilterWord {
+			get;
+		} = new ReactivePropertySlim<string>();
+
+		public IReactiveProperty<AvailableColumns> SortColumn {
+			get;
+		} = new ReactivePropertySlim<AvailableColumns>();
+
 		/// <summary>
 		/// 表示する列
 		/// </summary>
@@ -43,6 +52,7 @@ namespace CollectionManager.Models {
 			var cols = new ReactiveCollection<Col>();
 			cols.AddRange(new[] { new Col(AvailableColumns.Title), new Col(AvailableColumns.Max), new Col(AvailableColumns.NextReleaseDate) });
 			this.Columns = cols.ToReadOnlyReactiveCollection();
+			this.FilterWord.Subscribe(_ => this.RefreshList());
 		}
 
 		public void Load() {
@@ -65,10 +75,16 @@ namespace CollectionManager.Models {
 
 					return itemSet;
 				}));
-			this.ChangeSortCondition(AvailableColumns.Title);
+			this.RefreshList();
 		}
 
 		public void ChangeSortCondition(AvailableColumns column) {
+			this.SortColumn.Value = column;
+			this.RefreshList();
+		}
+
+		private void RefreshList() {
+			var filterWord = this.FilterWord.Value ?? "";
 			var d = new Dictionary<AvailableColumns, Func<ItemSet, object>> {
 				{AvailableColumns.Title, x => x.Title.Value},
 				{AvailableColumns.TitleYomi, x => x.TitleYomi.Value},
@@ -80,7 +96,10 @@ namespace CollectionManager.Models {
 				{AvailableColumns.Completed, x => x.Completed.Value}
 			};
 			this.SortedItemSetList.Clear();
-			this.SortedItemSetList.AddRange(this.ItemSetList.OrderBy(d[column]));
+			this.SortedItemSetList.AddRange(this.ItemSetList.Where(x =>
+				(x.Title.Value?.Contains(filterWord) ?? false) ||
+				(x.TitleYomi.Value?.Contains(filterWord) ?? false) ||
+				(x.Authors.Value?.Any(x => x.Contains(filterWord)) ?? false)).OrderBy(d[this.SortColumn.Value]));
 		}
 	}
 
