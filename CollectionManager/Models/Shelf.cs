@@ -36,7 +36,7 @@ namespace CollectionManager.Models {
 
 		public IReactiveProperty<AvailableColumns> SortColumn {
 			get;
-		} = new ReactivePropertySlim<AvailableColumns>();
+		} = new ReactivePropertySlim<AvailableColumns>(AvailableColumns.TitleYomi);
 
 		/// <summary>
 		/// 表示する列
