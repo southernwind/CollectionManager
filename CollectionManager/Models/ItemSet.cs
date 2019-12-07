@@ -15,6 +15,8 @@ using Microsoft.EntityFrameworkCore;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
+using Windows.Globalization;
+
 namespace CollectionManager.Models {
 	internal class ItemSet : ModelBase {
 		private readonly CollectionManagerDbContext _database;
@@ -134,6 +136,7 @@ namespace CollectionManager.Models {
 				this._database.SaveChanges();
 			}
 
+			this.TitleYomi.Value = JapanesePhoneticAnalyzer.GetWords(this.Title.Value).Select(x => x.YomiText).Aggregate((x, y) => x + y);
 			this._itemSetId = row.ItemSetId;
 		}
 
