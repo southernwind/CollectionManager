@@ -49,7 +49,7 @@ namespace CollectionManager.Models {
 
 		public ReactiveProperty<string> OrdinalRegex {
 			get;
-		} = new ReactiveProperty<string>(@"^\[(?<number>\d+)\].*$");
+		} = new ReactiveProperty<string>(@"^.*? (?<number>\d+)\..*?$");
 
 		public IReactiveProperty<double?> Min {
 			get;
